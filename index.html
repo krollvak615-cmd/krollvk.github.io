@@ -47,7 +47,7 @@
       --color-bg: #120c0a;
       --color-card: #1c1411;
       --color-text: #f3f4f6;
-      --color-border: rgba(249, 115, 22, 0.2);
+      --color-border: rgba(249, 115, 22, 0.25);
     }
     :root[data-theme="laura-sunset"] {
       --color-accent: #ef4444;
@@ -63,7 +63,7 @@
       --color-bg: #0b1409;
       --color-card: #142211;
       --color-text: #f4fbf0;
-      --color-border: rgba(132, 204, 22, 0.2);
+      --color-border: rgba(132, 204, 22, 0.25);
     }
     :root[data-theme="laura-autumn"] {
       --color-accent: #d97706;
@@ -71,7 +71,7 @@
       --color-bg: #170e06;
       --color-card: #24170c;
       --color-text: #fdf8f0;
-      --color-border: rgba(217, 119, 6, 0.2);
+      --color-border: rgba(217, 119, 6, 0.25);
     }
     :root[data-theme="laura-snow"] {
       --color-accent: #38bdf8;
@@ -79,7 +79,7 @@
       --color-bg: #09131a;
       --color-card: #101f2b;
       --color-text: #f0f9ff;
-      --color-border: rgba(56, 189, 248, 0.2);
+      --color-border: rgba(56, 189, 248, 0.25);
     }
     :root[data-theme="cyberpunk"] {
       --color-accent: #06b6d4;
@@ -95,7 +95,7 @@
       --color-bg: #06120e;
       --color-card: #0d211a;
       --color-text: #ecfdf5;
-      --color-border: rgba(16, 185, 129, 0.2);
+      --color-border: rgba(16, 185, 129, 0.25);
     }
     :root[data-theme="amethyst"] {
       --color-accent: #a855f7;
@@ -144,14 +144,12 @@
       transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    /* Dynamic Accent Color Applications */
     .bg-theme-accent { background-color: var(--color-accent); }
     .text-theme-accent { color: var(--color-accent); }
     .border-theme-accent { border-color: var(--color-accent); }
     .bg-theme-card { background-color: var(--color-card); }
     .border-theme-custom { border-color: var(--color-border); }
 
-    /* Custom Glow effects */
     .glow-effect {
       text-shadow: 0 0 25px var(--color-accent-glow), 0 0 45px var(--color-accent);
     }
@@ -159,19 +157,23 @@
       box-shadow: 0 0 20px -5px var(--color-accent-glow);
     }
 
-    /* Glassmorphism toggle class */
-    [data-glass="on"] .glass-panel {
-      background: rgba(28, 20, 17, 0.65) !important;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
+    /* Glassmorphism Styles */
+    [data-glass="on"] .glass-card {
+      background-color: rgba(255, 255, 255, 0.03) !important;
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+    [data-glass="on"] .glass-nav {
+      background-color: rgba(18, 12, 10, 0.5) !important;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
     }
 
-    /* Smooth page scroll */
     html {
       scroll-behavior: smooth;
     }
 
-    /* Hide scrollbars for slick look */
     .no-scrollbar::-webkit-scrollbar {
       display: none;
     }
@@ -195,7 +197,7 @@
   </div>
 
   <!-- NAVIGATION BAR -->
-  <header class="sticky top-0 z-40 w-full border-b border-white/5 bg-theme-bg/80 backdrop-blur-md transition-colors duration-300">
+  <header class="sticky top-0 z-40 w-full border-b border-white/5 bg-theme-bg/80 backdrop-blur-md glass-nav transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- LOGO: "Krollv" IN WHITE + "K" IN ACCENT -->
@@ -206,7 +208,6 @@
 
       <!-- CONTROLS & ADMIN BUTTON -->
       <div class="flex items-center gap-3 sm:gap-4">
-        <!-- Open Admin Panel -->
         <button onclick="openAdminModal()" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl border border-theme-custom bg-theme-card hover:bg-white/5 text-theme-accent transition flex items-center gap-2 box-glow">
           <i class="fa-solid fa-user-shield"></i>
           <span>Админка</span>
@@ -219,7 +220,7 @@
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
     <!-- HEADER BANNER SECTION -->
-    <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card shadow-2xl group">
+    <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-2xl group">
       <div class="relative h-48 sm:h-64 md:h-80 w-full overflow-hidden">
         <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
@@ -287,7 +288,7 @@
 
   <!-- ADMIN MODAL -->
   <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-theme-card border border-theme-custom rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-6">
+    <div class="bg-theme-card border border-theme-custom glass-card rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-6">
       
       <!-- Close Button -->
       <button onclick="closeAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg transition">
@@ -445,7 +446,7 @@
       console.warn("Supabase SDK initialization warning:", err);
     }
 
-    // --- MOCK LOCAL DATA (FALLBACK & INITIAL STATE) ---
+    // --- MOCK LOCAL DATA ---
     let artworksData = [
       {
         id: 1,
@@ -498,7 +499,30 @@
 
     // --- APP INITIALIZATION ---
     window.onload = function() {
-      // 1. Intro black overlay screen logic (1 second timer)
+      // Restore theme & glass state from localStorage
+      const savedTheme = localStorage.getItem('krollvk_theme');
+      if (savedTheme) {
+        document.documentElement.setAttribute('data-theme', savedTheme);
+      }
+      const savedGlass = localStorage.getItem('krollvk_glass');
+      if (savedGlass) {
+        document.documentElement.setAttribute('data-glass', savedGlass);
+        updateGlassBtnUI(savedGlass);
+      }
+
+      // Restore custom banner from localStorage
+      const savedBannerImg = localStorage.getItem('krollvk_banner_url');
+      if (savedBannerImg) {
+        const el = document.getElementById('bannerImg');
+        if (el) el.src = savedBannerImg;
+      }
+      const savedBannerTitle = localStorage.getItem('krollvk_banner_title');
+      if (savedBannerTitle) {
+        const el = document.getElementById('bannerBadge');
+        if (el) el.innerText = savedBannerTitle;
+      }
+
+      // Intro overlay transition
       const intro = document.getElementById('introOverlay');
       setTimeout(() => {
         if (intro) {
@@ -507,7 +531,7 @@
         }
       }, 1000);
 
-      // Load remote data from Supabase if available
+      // Fetch dynamic content
       fetchArtworksFromSupabase();
     };
 
@@ -541,7 +565,7 @@
       // Filter by active category
       const filtered = artworksData.filter(art => art.category === currentCategory);
 
-      // Determine items limit (default: 3 items)
+      // Limit pagination
       const limit = showAllArtworks ? filtered.length : 3;
       const visibleArtworks = filtered.slice(0, limit);
 
@@ -560,13 +584,12 @@
 
       visibleArtworks.forEach(art => {
         const card = document.createElement('div');
-        card.className = "group relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col";
+        card.className = "group relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col";
 
         card.innerHTML = `
           <div class="relative aspect-4/3 w-full overflow-hidden bg-black/40">
             <img src="${art.image_url}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/800x600/1c1411/f97316?text=${encodeURIComponent(art.title)}'">
             
-            <!-- ADMIN DELETE BUTTON (DIRECT ON CARD) -->
             ${isAdminLoggedIn ? `
               <button onclick="deleteArtwork(${art.id})" title="Удалить арт" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-xl bg-red-600/90 hover:bg-red-500 text-white flex items-center justify-center shadow-lg transition backdrop-blur-sm">
                 <i class="fa-solid fa-trash-can text-sm"></i>
@@ -581,7 +604,6 @@
             </div>
 
             <div class="flex items-center justify-between pt-3 border-t border-white/5">
-              <!-- DIRECT SUPABASE LIKES INCREMENT BUTTON -->
               <button onclick="likeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition group/like">
                 <i class="fa-solid fa-heart text-red-500 group-hover/like:scale-125 transition duration-200"></i>
                 <span id="likes-count-${art.id}">${art.likes || 0}</span>
@@ -594,7 +616,6 @@
         grid.appendChild(card);
       });
 
-      // Pagination button state
       if (filtered.length > 3) {
         showMoreContainer.classList.remove('hidden');
         showMoreBtn.innerHTML = showAllArtworks 
@@ -608,7 +629,7 @@
     // --- CATEGORY SWITCHER ---
     function setCategory(catName) {
       currentCategory = catName;
-      showAllArtworks = false; // Reset pagination limit on category change
+      showAllArtworks = false;
 
       document.querySelectorAll('.category-btn').forEach(btn => {
         btn.className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5";
@@ -635,42 +656,31 @@
       const art = artworksData.find(a => a.id === id);
       if (!art) return;
 
-      // Local optimistic update
-      art.likes = (art.likes || 0) + 1;
+      const newLikesCount = (art.likes || 0) + 1;
+      art.likes = newLikesCount;
+
       const countEl = document.getElementById(`likes-count-${id}`);
-      if (countEl) countEl.innerText = art.likes;
+      if (countEl) countEl.innerText = newLikesCount;
 
       showToast("Спасибо за лайк! ❤️");
 
-      // Direct Database update (Fetch current -> Add 1 -> Update Row)
       if (supabaseClient) {
         try {
-          // 1. Fetch current likes value directly from table row
-          const { data: row, error: fetchErr } = await supabaseClient
+          const { error } = await supabaseClient
             .from('artworks')
-            .select('likes')
-            .eq('id', id)
-            .single();
-
-          const currentLikes = (!fetchErr && row && typeof row.likes === 'number') ? row.likes : art.likes - 1;
-          const newLikes = currentLikes + 1;
-
-          // 2. Direct UPDATE query to Supabase
-          const { error: updateErr } = await supabaseClient
-            .from('artworks')
-            .update({ likes: newLikes })
+            .update({ likes: newLikesCount })
             .eq('id', id);
 
-          if (updateErr) {
-            console.warn("Direct Supabase update error:", updateErr);
+          if (error) {
+            console.warn("Supabase like update error:", error);
           }
         } catch (err) {
-          console.warn("Likes operation error:", err);
+          console.warn("Likes operation failed:", err);
         }
       }
     }
 
-    // --- ADMIN AUTHENTICATION (PASSWORD: LAURATOP25) ---
+    // --- ADMIN AUTHENTICATION ---
     function openAdminModal() {
       document.getElementById('adminModal').classList.remove('hidden');
     }
@@ -688,7 +698,7 @@
         document.getElementById('adminDashboardView').classList.remove('hidden');
         document.getElementById('adminPasswordInput').value = "";
         showToast("Успешный вход в админку!");
-        renderGallery(); // Re-render to display delete buttons on cards
+        renderGallery();
       } else {
         showToast("Неверный пароль!", true);
       }
@@ -703,13 +713,13 @@
       showToast("Вы вышли из админ-панели");
     }
 
-    // --- ADMIN CAPABILITY: DELETE ARTWORK DIRECTLY ---
+    // --- DELETE ARTWORK DIRECTLY ---
     async function deleteArtwork(id) {
       if (!confirm("Вы уверены, что хотите удалить этот арт из базы?")) return;
 
       artworksData = artworksData.filter(a => a.id !== id);
       renderGallery();
-      showToast("Арт удален");
+      showToast("Арт успешно удален");
 
       if (supabaseClient) {
         try {
@@ -718,12 +728,12 @@
             .delete()
             .eq('id', id);
         } catch (err) {
-          console.warn("Delete artwork database error:", err);
+          console.warn("Database deletion failed:", err);
         }
       }
     }
 
-    // --- ADMIN CAPABILITY: UPLOAD NEW ARTWORK VIA FILE PICKER ---
+    // --- UPLOAD NEW ARTWORK VIA FILE PICKER ---
     async function addNewArt() {
       const title = document.getElementById('artTitle').value.trim();
       const category = document.getElementById('artCategory').value;
@@ -736,7 +746,6 @@
 
       let imageUrl = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80";
 
-      // Upload file to Supabase Storage if file is selected
       if (fileInput.files && fileInput.files[0] && supabaseClient) {
         const file = fileInput.files[0];
         const fileName = `${Date.now()}_${file.name}`;
@@ -756,7 +765,7 @@
             }
           }
         } catch (err) {
-          console.warn("Storage upload error fallback:", err);
+          console.warn("Storage upload fallback error:", err);
         }
       } else if (fileInput.files && fileInput.files[0]) {
         imageUrl = URL.createObjectURL(fileInput.files[0]);
@@ -770,7 +779,6 @@
         likes: 0
       };
 
-      // Insert record to Supabase Table
       if (supabaseClient) {
         try {
           const { data, error } = await supabaseClient
@@ -791,13 +799,12 @@
       setCategory(category);
       showToast("Новый арт успешно опубликован!");
       
-      // Reset inputs & close modal
       document.getElementById('artTitle').value = "";
       fileInput.value = "";
       closeAdminModal();
     }
 
-    // --- ADMIN CAPABILITY: UPLOAD BANNER & UPDATE TITLE ---
+    // --- UPLOAD BANNER & UPDATE TITLE ---
     async function updateBanner() {
       const bannerText = document.getElementById('adminBannerText').value.trim();
       const fileInput = document.getElementById('adminBannerFile');
@@ -806,6 +813,7 @@
 
       if (bannerText && bannerBadge) {
         bannerBadge.innerText = bannerText;
+        localStorage.setItem('krollvk_banner_title', bannerText);
       }
 
       if (fileInput.files && fileInput.files[0]) {
@@ -832,16 +840,20 @@
             console.warn("Banner upload error:", err);
           }
         }
-        if (bannerImg) bannerImg.src = imageUrl;
+        if (bannerImg) {
+          bannerImg.src = imageUrl;
+          localStorage.setItem('krollvk_banner_url', imageUrl);
+        }
       }
 
       showToast("Баннер успешно обновлен!");
       closeAdminModal();
     }
 
-    // --- THEME & GLASSMORPHISM SWITCHER ---
+    // --- THEME & GLASSMORPHISM SWITCHER WITH LOCALSTORAGE ---
     function setTheme(themeName) {
       document.documentElement.setAttribute('data-theme', themeName);
+      localStorage.setItem('krollvk_theme', themeName);
       showToast(`Тема изменена: ${themeName}`);
     }
 
@@ -849,12 +861,16 @@
       const current = document.documentElement.getAttribute('data-glass');
       const next = current === 'on' ? 'off' : 'on';
       document.documentElement.setAttribute('data-glass', next);
-      
+      localStorage.setItem('krollvk_glass', next);
+      updateGlassBtnUI(next);
+    }
+
+    function updateGlassBtnUI(state) {
       const btn = document.getElementById('glassToggleBtn');
       if (btn) {
-        btn.innerText = next === 'on' ? 'ВКЛ' : 'ВЫКЛ';
-        btn.className = next === 'on' 
-          ? 'px-3 py-1.5 rounded-lg border border-theme-accent bg-theme-accent text-black font-bold transition' 
+        btn.innerText = state === 'on' ? 'ВКЛ' : 'ВЫКЛ';
+        btn.className = state === 'on' 
+          ? 'px-3 py-1.5 rounded-lg border border-theme-accent bg-theme-accent text-black font-bold transition shadow-md' 
           : 'px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 font-bold text-gray-400 transition';
       }
     }
