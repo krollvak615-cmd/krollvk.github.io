@@ -53,11 +53,6 @@
 </head>
 <body class="min-h-screen flex flex-col selection:bg-amber-500 selection:text-black">
 
-    <!-- Интро-экран (1 сек) -->
-    <div id="intro-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#12100e] transition-opacity duration-700">
-        <div class="text-6xl font-extrabold tracking-wider text-amber-500 animate-pulse">K</div>
-    </div>
-
     <!-- Шапка сайта с баннером -->
     <header id="site-header" class="relative w-full h-80 md:h-96 bg-cover bg-center flex flex-col justify-between p-6 md:p-10 transition-all duration-500" style="background-image: linear-gradient(to bottom, rgba(18,16,14,0.4), rgba(18,16,14,0.95)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop')">
         
@@ -103,7 +98,6 @@
 
         <!-- Сетка артов -->
         <div id="artworks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Динамически загружается через JS -->
             <div class="col-span-full text-center py-20 text-gray-400">Загрузка галереи...</div>
         </div>
 
@@ -187,7 +181,6 @@
 
     <!-- Скрипты логики -->
     <script>
-        // Конфигурация Supabase
         const SUPABASE_URL = 'https://xpgbtirhszniznuwvwql.supabase.co';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwZ2J0aXJoc3puaXpudXd2d3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE5MTY2MjczODJ9.4H4p2r5d8t7v9x3z1m0n2b4v6c8x0z2m4n6b8v0c2';
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
@@ -197,29 +190,19 @@
         let visibleLimit = 3;
         let isAdmin = localStorage.getItem('isAdmin') === 'true';
 
-        // Темы оформления
         const themes = {
-            amber: { accent: '#f59e0b', ring: 'focus:border-amber-500' },
-            emerald: { accent: '#10b981', ring: 'focus:border-emerald-500' },
-            cyan: { accent: '#06b6d4', ring: 'focus:border-cyan-500' },
-            rose: { accent: '#f43f5e', ring: 'focus:border-rose-500' },
-            purple: { accent: '#a855f7', ring: 'focus:border-purple-500' }
+            amber: { accent: '#f59e0b' },
+            emerald: { accent: '#10b981' },
+            cyan: { accent: '#06b6d4' },
+            rose: { accent: '#f43f5e' },
+            purple: { accent: '#a855f7' }
         };
 
         window.addEventListener('DOMContentLoaded', () => {
-            // Интро анимация
-            setTimeout(() => {
-                const intro = document.getElementById('intro-screen');
-                intro.style.opacity = '0';
-                setTimeout(() => intro.remove(), 700);
-            }, 1000);
-
-            // Загрузка сохраненной темы
             const savedTheme = localStorage.getItem('siteTheme') || 'amber';
             document.getElementById('theme-selector').value = savedTheme;
             changeTheme(savedTheme, false);
 
-            // Загрузка сохраненного баннера
             const savedBannerImg = localStorage.getItem('bannerImg');
             const savedBannerText = localStorage.getItem('bannerText');
             if (savedBannerImg) {
@@ -233,7 +216,6 @@
             fetchArtworks();
         });
 
-        // Смена темы
         function changeTheme(themeName, save = true) {
             const theme = themes[themeName] || themes.amber;
             document.getElementById('logo-k').style.color = theme.accent;
@@ -243,7 +225,6 @@
             if (save) localStorage.setItem('siteTheme', themeName);
         }
 
-        // Загрузка артов из Supabase
         async function fetchArtworks() {
             const grid = document.getElementById('artworks-grid');
             const { data, error } = await supabase
@@ -261,7 +242,6 @@
             renderGallery();
         }
 
-        // Рендер галереи с учетом категорий и лимита
         function renderGallery() {
             const grid = document.getElementById('artworks-grid');
             const filtered = allArtworks.filter(art => art.category === currentCategory);
@@ -276,7 +256,7 @@
             grid.innerHTML = sliced.map(art => `
                 <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group relative">
                     ${isAdmin ? `
-                        <button onclick="deleteArtwork('${art.id}', '${art.image_url}')" class="absolute top-3 right-3 z-20 bg-rose-600/90 hover:bg-rose-600 text-white p-2 rounded-xl text-xs shadow-lg transition">
+                        <button onclick="deleteArtwork('${art.id}')" class="absolute top-3 right-3 z-20 bg-rose-600/90 hover:bg-rose-600 text-white p-2 rounded-xl text-xs shadow-lg transition">
                             Удалить
                         </button>
                     ` : ''}
@@ -295,7 +275,6 @@
                 </div>
             `).join('');
 
-            // Кнопка "Показать больше"
             const loadMoreBtn = document.getElementById('load-more-container');
             if (filtered.length > visibleLimit) {
                 loadMoreBtn.classList.remove('hidden');
@@ -304,7 +283,6 @@
             }
         }
 
-        // Фильтрация категорий
         function filterCategory(cat) {
             currentCategory = cat;
             visibleLimit = 3;
@@ -323,13 +301,11 @@
             renderGallery();
         }
 
-        // Лайки
         async function likeArtwork(id) {
             const art = allArtworks.find(a => a.id === id);
             if (!art) return;
             const newLikes = (art.likes || 0) + 1;
             
-            // Оптимистичное обновление UI
             art.likes = newLikes;
             renderGallery();
 
@@ -339,7 +315,6 @@
                 .eq('id', id);
         }
 
-        // Управление админкой
         function toggleAdminModal() {
             const modal = document.getElementById('admin-modal');
             modal.classList.toggle('hidden');
@@ -372,7 +347,6 @@
             renderGallery();
         }
 
-        // Загрузка нового арта
         async function uploadArtwork() {
             const title = document.getElementById('new-art-title').value.trim();
             const category = document.getElementById('new-art-cat').value;
@@ -390,7 +364,7 @@
             btn.textContent = 'Загрузка...';
             btn.disabled = true;
 
-            const { data: uploadData, error: uploadError } = await supabase.storage
+            const { error: uploadError } = await supabase.storage
                 .from('artworks')
                 .upload(fileName, file);
 
@@ -425,8 +399,7 @@
             btn.disabled = false;
         }
 
-        // Удаление арта
-        async function deleteArtwork(id, imageUrl) {
+        async function deleteArtwork(id) {
             if (!confirm('Вы уверены, что хотите удалить этот арт?')) return;
 
             const { error } = await supabase
@@ -441,7 +414,6 @@
             }
         }
 
-        // Смена баннера шапки
         async function updateBanner() {
             const titleInput = document.getElementById('new-banner-title').value.trim();
             const fileInput = document.getElementById('new-banner-file');
@@ -455,7 +427,7 @@
                 const file = fileInput.files[0];
                 const fileName = `banner_${Date.now()}_${file.name}`;
 
-                const { data, error } = await supabase.storage
+                const { error } = await supabase.storage
                     .from('artworks')
                     .upload(fileName, file);
 
