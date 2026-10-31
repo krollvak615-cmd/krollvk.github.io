@@ -168,13 +168,13 @@
 
     /* Glassmorphism Styles */
     [data-glass="on"] .glass-card {
-      background-color: rgba(255, 255, 255, 0.03) !important;
-      backdrop-filter: blur(16px) saturate(180%);
+      background-color: color-mix(in srgb, var(--color-card) 55%, rgba(0, 0, 0, 0.55)) !important;
+      backdrop-filter: blur(16px) saturate(140%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
       border: 1px solid rgba(255, 255, 255, 0.12) !important;
     }
     [data-glass="on"] .glass-nav {
-      background-color: rgba(18, 12, 10, 0.5) !important;
+      background-color: rgba(10, 8, 14, 0.78) !important;
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
     }
@@ -190,7 +190,7 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
-        .soc { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .95rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); backdrop-filter:blur(10px); font-size:.75rem; font-weight:700; color:#e5e7eb; transition:transform .2s, border-color .2s, box-shadow .2s, color .2s }
+        .soc { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .95rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(10,8,14,.6); backdrop-filter:blur(10px); font-size:.75rem; font-weight:700; color:#e5e7eb; transition:transform .2s, border-color .2s, box-shadow .2s, color .2s }
     .soc i { color:var(--c); font-size:1rem }
     .soc:hover { transform:translateY(-2px); border-color:var(--c); color:#fff; box-shadow:0 6px 18px -8px var(--c) }
   </style>
