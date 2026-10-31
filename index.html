@@ -3,728 +3,880 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KrollvK — Artist Portfolio & Commissions</title>
+  <title>KrollvK — Artist Portfolio</title>
+  
+  <!-- Google Fonts & FontAwesome Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
   <script>
     tailwind.config = {
-      darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: { sans: ['Inter', 'sans-serif'] }
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            theme: {
+              accent: 'var(--color-accent)',
+              accentGlow: 'var(--color-accent-glow)',
+              bg: 'var(--color-bg)',
+              card: 'var(--color-card)',
+              text: 'var(--color-text)',
+              border: 'var(--color-border)',
+            }
+          }
         }
       }
     }
   </script>
-  <style>
-    /* Dynamic Theme Token Variables */
-    :root {
-      --bg-main: #1a100c;
-      --bg-card: #271812;
-      --bg-card-hover: #36221a;
-      --text-main: #fff5f0;
-      --text-muted: #fdba74;
-      --accent-color: #ea580c;
-      --accent-k: #ff7b00;
-      --border-color: rgba(234, 88, 12, 0.25);
-      --glass-bg: rgba(39, 24, 18, 0.75);
-    }
 
-    /* 1. Laura Classic (Twokinds) - Warm Fox Orange & White */
-    [data-theme="laura-classic"] {
-      --bg-main: #180e0a; --bg-card: #271812; --bg-card-hover: #382219;
-      --text-main: #fff5f0; --text-muted: #fdba74; --accent-color: #ea580c; --accent-k: #ff7b00;
-      --border-color: rgba(234, 88, 12, 0.3); --glass-bg: rgba(39, 24, 18, 0.75);
+  <style>
+    /* CSS Variables for Themes */
+    :root[data-theme="laura-classic"] {
+      --color-accent: #f97316;
+      --color-accent-glow: rgba(249, 115, 22, 0.4);
+      --color-bg: #120c0a;
+      --color-card: #1c1411;
+      --color-text: #f3f4f6;
+      --color-border: rgba(249, 115, 22, 0.2);
     }
-    /* 2. Laura Sunset - Deep Crimson & Warm Gold */
-    [data-theme="laura-sunset"] {
-      --bg-main: #1c0a0e; --bg-card: #2d1218; --bg-card-hover: #401a23;
-      --text-main: #fff0f3; --text-muted: #fca5a5; --accent-color: #e11d48; --accent-k: #fbbf24;
-      --border-color: rgba(225, 29, 72, 0.3); --glass-bg: rgba(45, 18, 24, 0.75);
+    :root[data-theme="laura-sunset"] {
+      --color-accent: #ef4444;
+      --color-accent-glow: rgba(239, 68, 68, 0.4);
+      --color-bg: #1a0a0f;
+      --color-card: #281219;
+      --color-text: #fbf1f2;
+      --color-border: rgba(239, 68, 68, 0.25);
     }
-    /* 3. Laura Summer - Sunny Yellow & Sky Blue */
-    [data-theme="laura-summer"] {
-      --bg-main: #0c1821; --bg-card: #1b2a38; --bg-card-hover: #273b4e;
-      --text-main: #f0f9ff; --text-muted: #7dd3fc; --accent-color: #0284c7; --accent-k: #facc15;
-      --border-color: rgba(2, 132, 199, 0.3); --glass-bg: rgba(27, 42, 56, 0.75);
+    :root[data-theme="laura-summer"] {
+      --color-accent: #84cc16;
+      --color-accent-glow: rgba(132, 204, 22, 0.4);
+      --color-bg: #0b1409;
+      --color-card: #142211;
+      --color-text: #f4fbf0;
+      --color-border: rgba(132, 204, 22, 0.2);
     }
-    /* 4. Laura Autumn - Amber & Auburn Leaf Tones */
-    [data-theme="laura-autumn"] {
-      --bg-main: #191209; --bg-card: #2a1f11; --bg-card-hover: #3b2c1a;
-      --text-main: #fefce8; --text-muted: #fde047; --accent-color: #d97706; --accent-k: #b45309;
-      --border-color: rgba(217, 119, 6, 0.3); --glass-bg: rgba(42, 31, 17, 0.75);
+    :root[data-theme="laura-autumn"] {
+      --color-accent: #d97706;
+      --color-accent-glow: rgba(217, 119, 6, 0.4);
+      --color-bg: #170e06;
+      --color-card: #24170c;
+      --color-text: #fdf8f0;
+      --color-border: rgba(217, 119, 6, 0.2);
     }
-    /* 5. Laura Winter / Snow - Cold Ice Blue & Warm Red Collar Accent */
-    [data-theme="laura-winter"] {
-      --bg-main: #0b131e; --bg-card: #142233; --bg-card-hover: #1e3148;
-      --text-main: #f0fdf4; --text-muted: #a5f3fc; --accent-color: #06b6d4; --accent-k: #ef4444;
-      --border-color: rgba(6, 182, 212, 0.3); --glass-bg: rgba(20, 34, 51, 0.75);
+    :root[data-theme="laura-snow"] {
+      --color-accent: #38bdf8;
+      --color-accent-glow: rgba(56, 189, 248, 0.4);
+      --color-bg: #09131a;
+      --color-card: #101f2b;
+      --color-text: #f0f9ff;
+      --color-border: rgba(56, 189, 248, 0.2);
     }
-    /* 6. Cyberpunk */
-    [data-theme="cyberpunk"] {
-      --bg-main: #09090e; --bg-card: #12131c; --bg-card-hover: #1a1c2b;
-      --text-main: #f3f4f6; --text-muted: #94a3b8; --accent-color: #ff0055; --accent-k: #00f0ff;
-      --border-color: rgba(0, 240, 255, 0.25); --glass-bg: rgba(18, 19, 28, 0.75);
+    :root[data-theme="cyberpunk"] {
+      --color-accent: #06b6d4;
+      --color-accent-glow: rgba(6, 182, 212, 0.4);
+      --color-bg: #09090b;
+      --color-card: #18181b;
+      --color-text: #fafafa;
+      --color-border: rgba(6, 182, 212, 0.3);
     }
-    /* 7. Synthwave */
-    [data-theme="synthwave"] {
-      --bg-main: #180b24; --bg-card: #28123d; --bg-card-hover: #3b1b59;
-      --text-main: #fae8ff; --text-muted: #c084fc; --accent-color: #d946ef; --accent-k: #06b6d4;
-      --border-color: rgba(217, 70, 239, 0.3); --glass-bg: rgba(40, 18, 61, 0.75);
+    :root[data-theme="emerald"] {
+      --color-accent: #10b981;
+      --color-accent-glow: rgba(16, 185, 129, 0.4);
+      --color-bg: #06120e;
+      --color-card: #0d211a;
+      --color-text: #ecfdf5;
+      --color-border: rgba(16, 185, 129, 0.2);
     }
-    /* 8. Emerald */
-    [data-theme="emerald"] {
-      --bg-main: #061412; --bg-card: #0d2623; --bg-card-hover: #143834;
-      --text-main: #ecfdf5; --text-muted: #6ee7b7; --accent-color: #10b981; --accent-k: #34d399;
-      --border-color: rgba(16, 185, 129, 0.25); --glass-bg: rgba(13, 38, 35, 0.75);
+    :root[data-theme="amethyst"] {
+      --color-accent: #a855f7;
+      --color-accent-glow: rgba(168, 85, 247, 0.4);
+      --color-bg: #120917;
+      --color-card: #1e1027;
+      --color-text: #faf5ff;
+      --color-border: rgba(168, 85, 247, 0.25);
     }
-    /* 9. Frost */
-    [data-theme="frost"] {
-      --bg-main: #0f172a; --bg-card: #1e293b; --bg-card-hover: #334155;
-      --text-main: #f8fafc; --text-muted: #94a3b8; --accent-color: #38bdf8; --accent-k: #818cf8;
-      --border-color: rgba(56, 189, 248, 0.25); --glass-bg: rgba(30, 41, 59, 0.65);
+    :root[data-theme="midnight"] {
+      --color-accent: #6366f1;
+      --color-accent-glow: rgba(99, 102, 241, 0.4);
+      --color-bg: #080b14;
+      --color-card: #101628;
+      --color-text: #eef2ff;
+      --color-border: rgba(99, 102, 241, 0.25);
+    }
+    :root[data-theme="sakura"] {
+      --color-accent: #ec4899;
+      --color-accent-glow: rgba(236, 72, 153, 0.4);
+      --color-bg: #170810;
+      --color-card: #27101c;
+      --color-text: #fdf2f8;
+      --color-border: rgba(236, 72, 153, 0.25);
+    }
+    :root[data-theme="gold"] {
+      --color-accent: #eab308;
+      --color-accent-glow: rgba(234, 179, 8, 0.4);
+      --color-bg: #141107;
+      --color-card: #241f0d;
+      --color-text: #fefce8;
+      --color-border: rgba(234, 179, 8, 0.25);
+    }
+    :root[data-theme="monochrome"] {
+      --color-accent: #e5e7eb;
+      --color-accent-glow: rgba(229, 231, 235, 0.2);
+      --color-bg: #0a0a0a;
+      --color-card: #171717;
+      --color-text: #ffffff;
+      --color-border: rgba(255, 255, 255, 0.15);
     }
 
     body {
-      background-color: var(--bg-main);
-      color: var(--text-main);
-      transition: background-color 0.3s ease, color 0.3s ease;
+      background-color: var(--color-bg);
+      color: var(--color-text);
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    .glass-panel {
-      background-color: var(--bg-card);
-      border: 1px solid var(--border-color);
-      transition: background-color 0.3s ease, border-color 0.3s ease, backdrop-filter 0.3s ease;
+    /* Dynamic Accent Color Applications */
+    .bg-theme-accent { background-color: var(--color-accent); }
+    .text-theme-accent { color: var(--color-accent); }
+    .border-theme-accent { border-color: var(--color-accent); }
+    .bg-theme-card { background-color: var(--color-card); }
+    .border-theme-custom { border-color: var(--color-border); }
+
+    /* Custom Glow effects */
+    .glow-effect {
+      text-shadow: 0 0 25px var(--color-accent-glow), 0 0 45px var(--color-accent);
+    }
+    .box-glow {
+      box-shadow: 0 0 20px -5px var(--color-accent-glow);
     }
 
+    /* Glassmorphism toggle class */
     [data-glass="on"] .glass-panel {
-      background: var(--glass-bg) !important;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      background: rgba(28, 20, 17, 0.65) !important;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
-    /* Brand Name Styling: Krollv in pure white, final K in active theme accent */
-    .brand-krollv { color: #ffffff !important; }
-    .brand-k-final { color: var(--accent-k) !important; }
+    /* Smooth page scroll */
+    html {
+      scroll-behavior: smooth;
+    }
 
-    /* Custom Scrollbar */
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-main); }
-    ::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 4px; }
+    /* Hide scrollbars for slick look */
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
   </style>
 </head>
-<body class="min-h-screen flex flex-col selection:bg-orange-500 selection:text-white">
+<body class="min-h-full flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
 
-  <!-- 1. INTRO SPLASH SCREEN (1 Second Dark Screen with Animated 'K') -->
-  <div id="introSplash" class="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center transition-opacity duration-700">
-    <div class="text-7xl md:text-9xl font-black tracking-widest animate-pulse brand-k-final">
-      K
-    </div>
-    <div class="mt-4 text-xs tracking-widest uppercase text-gray-500 font-mono">
-      KrollvK Portfolio Loading...
-    </div>
+  <!-- 1. INTRO OVERLAY (1 SECOND BLACK SCREEN WITH GLOWING K) -->
+  <div id="introOverlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center transition-opacity duration-500 ease-out">
+    <span class="text-8xl font-black text-theme-accent glow-effect animate-pulse tracking-tighter">K</span>
   </div>
 
-  <!-- HEADER -->
-  <header class="sticky top-0 z-40 glass-panel border-b px-4 py-3 flex items-center justify-between shadow-lg">
-    <div class="flex items-center space-x-3">
-      <!-- 2. Logo: Krollv in white, final K in theme accent color -->
-      <h1 class="text-xl md:text-2xl font-black tracking-wide">
-        <span class="brand-krollv">Krollv</span><span class="brand-k-final">K</span>
-      </h1>
-      <!-- Days Counter since Dec 23, 2025 -->
-      <div class="hidden sm:inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-black/40 border border-white/10 text-gray-300" title="С 23 декабря 2025 года">
-        🎨 Дней творчества: <span id="daysCount" class="font-bold ml-1 text-white">0</span>
-      </div>
-    </div>
+  <!-- NOTIFICATION TOAST -->
+  <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 ease-in-out max-w-md bg-theme-card border border-theme-custom px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
+    <i id="toastIcon" class="fa-solid fa-circle-check text-theme-accent text-lg"></i>
+    <span id="toastMsg" class="text-sm font-medium">Уведомление</span>
+  </div>
 
-    <!-- Social Links & Admin Panel -->
-    <div class="flex items-center space-x-2 sm:space-x-4 text-sm">
-      <a href="https://www.deviantart.com/krollvk" target="_blank" class="hover:text-orange-400 transition hidden md:inline">DeviantArt</a>
-      <a href="https://www.furaffinity.net/user/krollvk" target="_blank" class="hover:text-orange-400 transition hidden md:inline">FurAffinity</a>
-      <a href="https://t.me/krollvk" target="_blank" class="hover:text-orange-400 transition hidden md:inline">Telegram</a>
+  <!-- NAVIGATION BAR -->
+  <header class="sticky top-0 z-40 w-full border-b border-white/5 bg-theme-bg/80 backdrop-blur-md transition-colors duration-300">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
-      <!-- Discord Nick Copy Button -->
-      <button onclick="copyDiscord()" class="bg-black/30 hover:bg-black/50 px-2.5 py-1.5 rounded-lg text-xs border border-white/10 transition flex items-center gap-1.5" title="Скопировать Discord ник">
-        <i class="fa-brands fa-discord text-indigo-400"></i> @krollvk
-      </button>
-      
-      <!-- Admin Modal Button -->
-      <button onclick="openAdminModal()" class="p-2 rounded-lg bg-black/30 hover:bg-white/10 border border-white/10 transition text-gray-300 hover:text-white" title="Админ-панель">
-        <i class="fa-solid fa-gear"></i>
-      </button>
+      <!-- LOGO: "Krollv" IN WHITE + "K" IN ACCENT -->
+      <a href="#" class="flex items-center gap-1 group">
+        <span class="text-2xl sm:text-3xl font-black tracking-tight text-white group-hover:opacity-90 transition">Krollv</span>
+        <span class="text-2xl sm:text-3xl font-black tracking-tight text-theme-accent glow-effect">K</span>
+      </a>
+
+      <!-- CONTROLS & ADMIN BUTTON -->
+      <div class="flex items-center gap-3 sm:gap-4">
+        <!-- Open Admin Panel -->
+        <button onclick="openAdminModal()" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl border border-theme-custom bg-theme-card hover:bg-white/5 text-theme-accent transition flex items-center gap-2 box-glow">
+          <i class="fa-solid fa-user-shield"></i>
+          <span>Админка</span>
+        </button>
+      </div>
     </div>
   </header>
 
   <!-- MAIN CONTENT CONTAINER -->
-  <main class="flex-grow container mx-auto px-4 py-6 max-w-5xl space-y-10">
+  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
 
-    <!-- HERO SECTION & BANNER -->
-    <section class="rounded-2xl overflow-hidden glass-panel shadow-2xl relative">
-      <!-- 16:9 Aspect Ratio Hero Banner -->
-      <div class="w-full aspect-[16/9] max-h-[360px] bg-black/60 relative overflow-hidden flex items-center justify-center">
-        <img src="https://placehold.co/1280x720/271812/ea580c?text=Latest+Tom+Fischbach+Sketch+Color" alt="Latest Tom Fischbach sketch color" id="bannerImg" class="w-full h-full object-cover opacity-85">
-        <div class="absolute bottom-4 left-4 bg-black/75 backdrop-blur-md px-3.5 py-1.5 rounded-xl border border-white/10 text-xs sm:text-sm font-medium tracking-wide text-orange-300 shadow-lg">
-          ✨ Latest Tom Fischbach sketch color
-        </div>
+    <!-- HEADER BANNER SECTION -->
+    <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card shadow-2xl group">
+      <div class="relative h-48 sm:h-64 md:h-80 w-full overflow-hidden">
+        <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
+        <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
       </div>
-
-      <!-- Artist Bio & Laura Muse Mention -->
-      <div class="p-6 md:p-8 flex flex-col md:flex-row items-center gap-6">
-        <div class="w-24 h-24 md:w-28 md:h-28 rounded-2xl overflow-hidden border-2 border-white/20 bg-black/40 shadow-xl flex-shrink-0">
-          <img src="https://placehold.co/300x300/271812/ea580c?text=Laura+Fox" alt="Laura Muse" class="w-full h-full object-cover">
-        </div>
-        <div class="text-center md:text-left space-y-2 flex-1">
-          <h2 class="text-2xl md:text-3xl font-extrabold tracking-tight">
-            Привет! Я <span class="brand-krollv">Krollv</span><span class="brand-k-final">K</span> — цифровой художник
-          </h2>
-          <p class="text-gray-300 text-xs md:text-sm max-w-3xl leading-relaxed">
-            Моя главная муза и вдохновение — <strong class="text-orange-400">Лаура</strong> (антропоморфная лисица с рыже-коричневым мехом, белым пузом и синими глазами из Twokinds). Ради передачи её тепла и эмоций я рисую каждый день! Вдохновляюсь стилем Тома Фишбаха. Добро пожаловать в мой мир!
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <!-- AUDIO PLAYER WIDGET -->
-    <section class="glass-panel rounded-2xl p-4 md:p-6 shadow-xl flex flex-col md:flex-row items-center justify-between gap-4">
-      <div class="flex items-center space-x-3 w-full md:w-auto">
-        <button id="playBtn" onclick="togglePlay()" class="w-12 h-12 rounded-xl bg-orange-600 hover:bg-orange-500 text-white flex items-center justify-center shadow-lg transition flex-shrink-0 text-lg">
-          <i id="playIcon" class="fa-solid fa-play ml-0.5"></i>
-        </button>
+      
+      <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <h3 id="trackTitle" class="text-sm font-bold">Ambient Studio Session #1</h3>
-          <p class="text-xs text-gray-400">KrollvK Creative Playlist</p>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theme-accent/20 border border-theme-accent/40 text-theme-accent text-xs font-semibold mb-2 backdrop-blur-sm">
+            <i class="fa-solid fa-sparkles"></i>
+            <span id="bannerBadge">✨ Latest Tom Fischbach sketch color</span>
+          </div>
+          <h1 id="bannerTitle" class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
+            Галерея работ KrollvK
+          </h1>
         </div>
       </div>
-
-      <!-- Thin progress bar & volume controls -->
-      <div class="flex items-center gap-4 w-full md:w-1/2">
-        <span id="currentTime" class="text-[11px] text-gray-400 font-mono">0:00</span>
-        <div class="relative flex-grow h-2 bg-black/40 rounded-full overflow-hidden cursor-pointer" onclick="seekAudio(event)">
-          <div id="progressBar" class="absolute top-0 left-0 h-full bg-orange-500 w-0 transition-all"></div>
-        </div>
-        <span id="durationTime" class="text-[11px] text-gray-400 font-mono">0:00</span>
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-volume-high text-xs text-gray-400"></i>
-          <input type="range" min="0" max="1" step="0.05" value="0.7" onchange="setVolume(this.value)" class="w-16 accent-orange-500 cursor-pointer">
-        </div>
-      </div>
-      <!-- Hidden HTML5 Audio Element -->
-      <audio id="bgAudio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
     </section>
 
     <!-- GALLERY SECTION -->
     <section class="space-y-6">
-      <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <h3 class="text-xl font-bold">Галерея артов</h3>
-        <!-- Category Filter Buttons -->
-        <div class="flex flex-wrap gap-2 text-xs">
-          <button onclick="filterGallery('all', this)" class="cat-btn px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/40 hover:bg-white/10 transition font-medium border-orange-500 bg-orange-600 text-white">Все</button>
-          <button onclick="filterGallery('colored-sketches', this)" class="cat-btn px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/40 hover:bg-white/10 transition font-medium">Цветные скетчи</button>
-          <button onclick="filterGallery('digital-art', this)" class="cat-btn px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/40 hover:bg-white/10 transition font-medium">Цифровые работы</button>
-          <button onclick="filterGallery('tom-fischbach', this)" class="cat-btn px-3.5 py-1.5 rounded-xl border border-white/10 bg-black/40 hover:bg-white/10 transition font-medium">Покрасы Тома</button>
+      
+      <!-- CATEGORY TABS (DEFAULT: COLORED SKETCHES, NO ALL BUTTON) -->
+      <div class="flex items-center justify-between border-b border-white/5 pb-4 overflow-x-auto no-scrollbar">
+        <div class="flex items-center gap-2 sm:gap-3" id="categoryContainer">
+          <button onclick="setCategory('Цветные скетчи')" id="cat-Colored" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg">
+            Цветные скетчи
+          </button>
+          <button onclick="setCategory('Цифровые работы')" id="cat-Digital" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5">
+            Цифровые работы
+          </button>
+          <button onclick="setCategory('Покрасы Тома')" id="cat-Tom" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5">
+            Покрасы Тома
+          </button>
         </div>
       </div>
 
-      <!-- Artworks Grid (Renders first 3 items by default) -->
-      <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Rendered dynamically -->
+      <!-- ARTWORK CARDS GRID -->
+      <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+        <!-- Dynamic Cards Inserted Here -->
       </div>
 
-      <!-- Show More / Показать больше Button -->
-      <div id="showMoreContainer" class="text-center pt-2">
-        <button id="showMoreBtn" onclick="toggleShowAllArt()" class="px-6 py-3 rounded-xl bg-black/40 hover:bg-white/10 border border-white/10 font-bold text-xs sm:text-sm tracking-wide transition inline-flex items-center gap-2">
-          <span>Показать больше артов</span>
-          <i id="showMoreIcon" class="fa-solid fa-chevron-down"></i>
+      <!-- SHOW MORE BUTTON -->
+      <div id="showMoreContainer" class="flex justify-center pt-6 hidden">
+        <button onclick="toggleShowAll()" id="showMoreBtn" class="px-8 py-3 rounded-2xl border border-theme-custom bg-theme-card hover:bg-theme-accent hover:text-black text-theme-accent text-sm font-bold transition duration-300 flex items-center gap-2 shadow-xl box-glow">
+          <span>Показать больше</span>
+          <i class="fa-solid fa-chevron-down"></i>
         </button>
       </div>
     </section>
-
-    <!-- COMMISSION CALCULATOR SECTION -->
-    <section class="glass-panel rounded-2xl p-6 md:p-8 shadow-xl space-y-6">
-      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-white/10 pb-4">
-        <div>
-          <h3 class="text-xl font-bold">Калькулятор заказов & Прайс</h3>
-          <p class="text-xs text-gray-400 mt-1">Оплата заказов принимается строго в криптовалюте (USDT / BTC / ETH). Фиксированная доплата за сложный покрас: <span class="text-orange-400 font-bold">+$35</span>.</p>
-        </div>
-        <div class="text-right">
-          <div class="text-xs text-gray-400">Итого к оплате:</div>
-          <div id="totalPrice" class="text-3xl font-extrabold text-orange-400">$65.00</div>
-        </div>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
-        <!-- Commission Type selection -->
-        <div class="space-y-3">
-          <label class="block text-xs font-bold uppercase tracking-wider text-gray-300">Тип арта:</label>
-          <div class="space-y-2">
-            <label class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-white/10 cursor-pointer hover:border-orange-500/50 transition">
-              <div class="flex items-center space-x-3">
-                <input type="radio" name="commType" value="30" checked onchange="calculateTotal()" class="accent-orange-500">
-                <span>Портрет (Bust)</span>
-              </div>
-              <span class="font-bold text-gray-300">$30</span>
-            </label>
-            <label class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-white/10 cursor-pointer hover:border-orange-500/50 transition">
-              <div class="flex items-center space-x-3">
-                <input type="radio" name="commType" value="40" onchange="calculateTotal()" class="accent-orange-500">
-                <span>По пояс (Waist / Hips)</span>
-              </div>
-              <span class="font-bold text-gray-300">$40</span>
-            </label>
-            <label class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-white/10 cursor-pointer hover:border-orange-500/50 transition">
-              <div class="flex items-center space-x-3">
-                <input type="radio" name="commType" value="50" onchange="calculateTotal()" class="accent-orange-500">
-                <span>Полный рост (Full body)</span>
-              </div>
-              <span class="font-bold text-gray-300">$50</span>
-            </label>
-          </div>
-        </div>
-
-        <!-- Addons & Crypto Mail Template -->
-        <div class="space-y-4 flex flex-col justify-between">
-          <div class="space-y-3">
-            <label class="block text-xs font-bold uppercase tracking-wider text-gray-300">Дополнительные опции:</label>
-            <label class="flex items-center justify-between p-3 rounded-xl bg-black/30 border border-white/10 cursor-pointer hover:border-orange-500/50 transition">
-              <div class="flex items-center space-x-3">
-                <input type="checkbox" id="colorAddon" checked onchange="calculateTotal()" class="accent-orange-500 rounded">
-                <span>Детальный покрас (обязательно)</span>
-              </div>
-              <span class="font-bold text-orange-400">+$35</span>
-            </label>
-          </div>
-
-          <button onclick="sendOrderEmail()" class="w-full py-3.5 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-sm">
-            <i class="fa-solid fa-paper-plane"></i> Заказать через почту (Crypto)
-          </button>
-        </div>
-      </div>
-    </section>
-
-    <!-- FAQ SECTION -->
-    <section class="glass-panel rounded-2xl p-6 md:p-8 shadow-xl space-y-6">
-      <h3 class="text-xl font-bold">Частые вопросы (FAQ)</h3>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-        <div class="p-4 rounded-xl bg-black/30 border border-white/10 space-y-2">
-          <h4 class="font-bold text-orange-400">На чем ты рисуешь?</h4>
-          <p class="text-xs text-gray-300 leading-relaxed">Использую простой графический планшет за $10 и проверенный временем Photoshop 2021.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-black/30 border border-white/10 space-y-2">
-          <h4 class="font-bold text-orange-400">Какие сроки выполнения заказов?</h4>
-          <p class="text-xs text-gray-300 leading-relaxed">Обычно работа над заказом занимает от нескольких дней до одной недели в зависимости от сложности.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-black/30 border border-white/10 space-y-2">
-          <h4 class="font-bold text-orange-400">Почему именно антропоморфные лисы?</h4>
-          <p class="text-xs text-gray-300 leading-relaxed">Лаура из Twokinds — моя главная муза. Передача её мимики, шерсти и характера вдохновляет меня совершенствоваться ежедневно.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-black/30 border border-white/10 space-y-2">
-          <h4 class="font-bold text-orange-400">Как производится оплата?</h4>
-          <p class="text-xs text-gray-300 leading-relaxed">Только криптовалюта (USDT / BTC / ETH). Детали обсуждаем перед началом работы.</p>
-        </div>
-      </div>
-    </section>
-
   </main>
 
   <!-- FOOTER -->
-  <footer class="glass-panel border-t mt-12 py-6 px-4 text-center text-xs text-gray-400 space-y-2">
-    <div>© 2025–2026 KrollvK. All rights reserved. Inspired by Laura & Tom Fischbach.</div>
-    <div class="flex justify-center space-x-4">
-      <a href="https://www.deviantart.com/krollvk" target="_blank" class="hover:text-white">DeviantArt</a>
-      <a href="https://www.furaffinity.net/user/krollvk" target="_blank" class="hover:text-white">FurAffinity</a>
-      <a href="https://t.me/krollvk" target="_blank" class="hover:text-white">Telegram</a>
+  <footer class="mt-auto border-t border-white/5 bg-theme-card/30 py-8">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
+      <div class="flex items-center gap-2">
+        <span class="font-bold text-white">Krollv<span class="text-theme-accent">K</span></span>
+        <span>© 2026. Styled with Laura (Twokinds) theme.</span>
+      </div>
+      <div class="flex items-center gap-6">
+        <a href="https://deviantart.com" target="_blank" rel="noopener" class="hover:text-theme-accent transition"><i class="fa-brands fa-deviantart text-sm"></i> DeviantArt</a>
+        <a href="https://github.com/krollvak615-cmd/krollvk.github.io" target="_blank" rel="noopener" class="hover:text-theme-accent transition"><i class="fa-brands fa-github text-sm"></i> GitHub</a>
+      </div>
     </div>
   </footer>
 
-  <!-- ADMIN PANEL MODAL (NO password hint displayed) -->
-  <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-    <div class="glass-panel w-full max-w-xl rounded-2xl p-6 space-y-6 shadow-2xl relative border border-orange-500/30">
-      <div class="flex items-center justify-between">
-        <h3 class="text-lg font-bold flex items-center gap-2">
-          <i class="fa-solid fa-lock text-orange-500"></i> Админ-панель KrollvK
-        </h3>
-        <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
-      </div>
+  <!-- ADMIN MODAL -->
+  <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
+    <div class="bg-theme-card border border-theme-custom rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-6">
+      
+      <!-- Close Button -->
+      <button onclick="closeAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg transition">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
 
-      <!-- Password Auth View (Cleaned: hints removed) -->
-      <div id="adminLoginView" class="space-y-4">
-        <p class="text-xs text-gray-400">Введите пароль администратора для входа в панель управления:</p>
-        <input type="password" id="adminPassInput" placeholder="Введите пароль..." class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-orange-500">
-        <button onclick="checkAdminPass()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-sm transition">Войти</button>
-      </div>
-
-      <!-- Admin Dashboard View -->
-      <div id="adminDashboardView" class="hidden space-y-6 max-h-[70vh] overflow-y-auto pr-1">
-        
-        <!-- 5 Laura & Custom Color Themes Switcher -->
-        <div class="space-y-3">
-          <label class="block text-xs font-bold uppercase tracking-wider text-gray-300">Варианты тем (Буква 'K' меняет цвет):</label>
-          <div class="grid grid-cols-2 sm:grid-cols-3 gap-2 text-xs">
-            <button onclick="setTheme('laura-classic', this)" class="theme-btn p-2 rounded-xl border border-orange-500 bg-[#271812] text-orange-400 font-bold">🦊 Laura Classic</button>
-            <button onclick="setTheme('laura-sunset', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#2d1218] text-[#fbbf24] font-semibold">🌅 Laura Sunset</button>
-            <button onclick="setTheme('laura-summer', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#1b2a38] text-[#facc15] font-semibold">☀️ Laura Summer</button>
-            <button onclick="setTheme('laura-autumn', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#2a1f11] text-[#d97706] font-semibold">🍂 Laura Autumn</button>
-            <button onclick="setTheme('laura-winter', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#142233] text-[#ef4444] font-semibold">❄️ Laura Winter</button>
-            <button onclick="setTheme('cyberpunk', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#12131c] text-[#00f0ff] font-semibold">Cyberpunk</button>
-            <button onclick="setTheme('synthwave', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#28123d] text-[#d946ef] font-semibold">Synthwave</button>
-            <button onclick="setTheme('emerald', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#0d2623] text-[#10b981] font-semibold">Emerald</button>
-            <button onclick="setTheme('frost', this)" class="theme-btn p-2 rounded-xl border border-white/10 bg-[#1e293b] text-[#38bdf8] font-semibold">Frost</button>
+      <!-- AUTH FORM (NO PASSWORD HINT) -->
+      <div id="adminAuthView" class="space-y-4">
+        <div class="text-center space-y-1">
+          <div class="w-12 h-12 rounded-2xl bg-theme-accent/20 border border-theme-accent/40 text-theme-accent flex items-center justify-center mx-auto mb-3 text-xl">
+            <i class="fa-solid fa-lock"></i>
           </div>
+          <h3 class="text-xl font-bold text-white">Панель управления</h3>
+          <p class="text-xs text-gray-400">Введите пароль для доступа к функциям администратора</p>
         </div>
 
-        <!-- Glassmorphism Toggle Switch -->
-        <div class="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
+        <form onsubmit="handleAdminAuth(event)" class="space-y-4">
+          <input type="password" id="adminPasswordInput" placeholder="Введите пароль..." required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-theme-accent transition">
+          <button type="submit" class="w-full py-3 bg-theme-accent text-black font-bold rounded-xl text-sm transition hover:opacity-90 shadow-lg">
+            Войти в систему
+          </button>
+        </form>
+      </div>
+
+      <!-- ADMIN DASHBOARD (VISIBLE ONCE LOGGED IN) -->
+      <div id="adminDashboardView" class="hidden space-y-6 max-h-[75vh] overflow-y-auto pr-1 no-scrollbar">
+        <div class="flex items-center justify-between border-b border-white/10 pb-4">
           <div>
-            <div class="text-xs font-bold">Эффект стекла (Glassmorphism)</div>
-            <div class="text-[11px] text-gray-400">Прозрачность и размытие панелей сайта</div>
+            <span class="text-xs text-theme-accent font-bold uppercase tracking-wider">Администратор</span>
+            <h3 class="text-lg font-bold text-white">Управление сайтом</h3>
           </div>
-          <button onclick="toggleGlass()" id="glassToggleBtn" class="px-3.5 py-1.5 rounded-lg bg-black/50 border border-white/10 text-xs font-bold transition">Выкл</button>
-        </div>
-
-        <!-- File Upload Explorer Integration (Supabase) -->
-        <div class="space-y-3 pt-2 border-t border-white/10">
-          <label class="block text-xs font-bold uppercase tracking-wider text-gray-300">Загрузка нового арта с компьютера (Supabase)</label>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-            <input type="text" id="newArtTitle" placeholder="Название арта..." class="bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
-            <select id="newArtCat" class="bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-gray-300">
-              <option value="colored-sketches">Цветной скетч</option>
-              <option value="digital-art">Цифровая работа</option>
-              <option value="tom-fischbach">Покрас Тома Фишбаха</option>
-            </select>
-            <div class="sm:col-span-2 flex flex-col space-y-1.5">
-              <label class="text-[11px] text-gray-400">Файл изображения с проводника компьютера:</label>
-              <input type="file" id="newArtFile" accept="image/*" class="file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-orange-600 file:text-white hover:file:bg-orange-500 bg-black/40 border border-white/10 rounded-xl text-xs text-gray-300 cursor-pointer">
-            </div>
-          </div>
-          <button onclick="addNewArt()" class="w-full py-2.5 bg-orange-600 hover:bg-orange-500 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-2">
-            <i class="fa-solid fa-cloud-arrow-up"></i> Загрузить и опубликовать арт
+          <button onclick="adminLogout()" class="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold hover:bg-red-500/20 transition">
+            Выйти
           </button>
         </div>
 
+        <!-- 1. BANNER CUSTOMIZATION -->
+        <div class="space-y-3 pb-4 border-b border-white/10">
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">1. Смена баннера шапки</label>
+          <div class="space-y-3 text-xs">
+            <input type="text" id="adminBannerText" placeholder="Подпись баннера (напр. ✨ Latest Tom Fischbach sketch color)" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
+            <div>
+              <label class="block text-[11px] text-gray-400 mb-1">Изображение баннера:</label>
+              <input type="file" id="adminBannerFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-theme-accent file:text-black hover:file:opacity-90 cursor-pointer bg-black/40 border border-white/10 rounded-xl">
+            </div>
+            <button onclick="updateBanner()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs transition hover:opacity-90 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-image"></i> Обновить баннер
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. UPLOAD NEW ARTWORK -->
+        <div class="space-y-3 pb-4 border-b border-white/10">
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">2. Загрузить новый арт</label>
+          <div class="space-y-3 text-xs">
+            <input type="text" id="artTitle" placeholder="Название арта" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
+            <select id="artCategory" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
+              <option value="Цветные скетчи">Цветные скетчи</option>
+              <option value="Цифровые работы">Цифровые работы</option>
+              <option value="Покрасы Тома">Покрасы Тома</option>
+            </select>
+            <div>
+              <label class="block text-[11px] text-gray-400 mb-1">Файл арта:</label>
+              <input type="file" id="artFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-theme-accent file:text-black hover:file:opacity-90 cursor-pointer bg-black/40 border border-white/10 rounded-xl">
+            </div>
+            <button onclick="addNewArt()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs transition hover:opacity-90 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Опубликовать арт
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. THEMES & GLASSMORPHISM SWITCHER -->
+        <div class="space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">3. Темы оформления (12 тем)</label>
+          
+          <div class="grid grid-cols-2 gap-2 text-xs">
+            <!-- Laura Themes -->
+            <button onclick="setTheme('laura-classic')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-orange-500 text-left flex items-center justify-between">
+              <span>Laura Classic</span>
+              <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+            </button>
+            <button onclick="setTheme('laura-sunset')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-red-500 text-left flex items-center justify-between">
+              <span>Laura Sunset</span>
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+            </button>
+            <button onclick="setTheme('laura-summer')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-lime-500 text-left flex items-center justify-between">
+              <span>Laura Summer</span>
+              <span class="w-3 h-3 rounded-full bg-lime-500"></span>
+            </button>
+            <button onclick="setTheme('laura-autumn')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-amber-600 text-left flex items-center justify-between">
+              <span>Laura Autumn</span>
+              <span class="w-3 h-3 rounded-full bg-amber-600"></span>
+            </button>
+            <button onclick="setTheme('laura-snow')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-sky-400 text-left flex items-center justify-between">
+              <span>Laura Snow</span>
+              <span class="w-3 h-3 rounded-full bg-sky-400"></span>
+            </button>
+
+            <!-- Extra Themes -->
+            <button onclick="setTheme('cyberpunk')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-cyan-400 text-left flex items-center justify-between">
+              <span>Cyberpunk</span>
+              <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
+            </button>
+            <button onclick="setTheme('emerald')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-emerald-500 text-left flex items-center justify-between">
+              <span>Emerald</span>
+              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+            </button>
+            <button onclick="setTheme('amethyst')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-purple-500 text-left flex items-center justify-between">
+              <span>Amethyst</span>
+              <span class="w-3 h-3 rounded-full bg-purple-500"></span>
+            </button>
+            <button onclick="setTheme('midnight')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-indigo-500 text-left flex items-center justify-between">
+              <span>Midnight</span>
+              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
+            </button>
+            <button onclick="setTheme('sakura')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-pink-500 text-left flex items-center justify-between">
+              <span>Sakura</span>
+              <span class="w-3 h-3 rounded-full bg-pink-500"></span>
+            </button>
+            <button onclick="setTheme('gold')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-yellow-400 text-left flex items-center justify-between">
+              <span>Gold</span>
+              <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
+            </button>
+            <button onclick="setTheme('monochrome')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-gray-300 text-left flex items-center justify-between">
+              <span>Monochrome</span>
+              <span class="w-3 h-3 rounded-full bg-gray-300"></span>
+            </button>
+          </div>
+
+          <!-- Glassmorphism Toggle -->
+          <div class="pt-2 flex items-center justify-between text-xs">
+            <span class="text-gray-300">Стеклянный эффект (Glassmorphism):</span>
+            <button onclick="toggleGlass()" id="glassToggleBtn" class="px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 font-bold text-gray-400 transition">
+              ВЫКЛ
+            </button>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
-  <!-- SUPABASE SDK -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- APPLICATION SCRIPT LOGIC -->
   <script>
-    // 1. Intro Splash Screen Handler (1 second dark screen)
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const splash = document.getElementById('introSplash');
-        if (splash) {
-          splash.style.opacity = '0';
-          setTimeout(() => splash.remove(), 700);
-        }
-      }, 1000);
-    });
-
-    // Supabase Credentials Integration
+    // --- SUPABASE INITIALIZATION ---
     const SUPABASE_URL = "https://xpgbtirhszniznuwvwql.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_J0_DlQ48IumBzflwTZc-dw_HlZbvlxD";
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwZ2J0aXJoc3puaXpudXd2d3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNzExMDMsImV4cCI6MjA1NTc0NzEwM30.6N_J6KvwR6gZg5cO0wZ9zB9h5kL3oX8uQ5rT2v8Y9w0";
+    
     let supabaseClient = null;
-
     try {
       if (window.supabase) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       }
-    } catch(e) {
-      console.warn("Supabase init status:", e);
+    } catch (err) {
+      console.warn("Supabase SDK initialization warning:", err);
     }
 
-    // Days Counter since Dec 23, 2025
-    function updateDaysCounter() {
-      const startDate = new Date('2025-12-23T00:00:00');
-      const now = new Date();
-      const diffTime = Math.abs(now - startDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-      const el = document.getElementById('daysCount');
-      if (el) el.innerText = diffDays > 0 ? diffDays : 1;
-    }
-
-    // Discord Copy to Clipboard
-    function copyDiscord() {
-      const text = "@krollvk";
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(text).then(() => {
-          alert("Discord ник (@krollvk) скопирован в буфер обмена!");
-        }).catch(() => fallbackCopy(text));
-      } else {
-        fallbackCopy(text);
+    // --- MOCK LOCAL DATA (FALLBACK & INITIAL STATE) ---
+    let artworksData = [
+      {
+        id: 1,
+        title: "Laura Leash",
+        category: "Цветные скетчи",
+        image_url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80",
+        likes: 24
+      },
+      {
+        id: 2,
+        title: "Seasons of Laura (Summer/Winter)",
+        category: "Цветные скетчи",
+        image_url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
+        likes: 43
+      },
+      {
+        id: 3,
+        title: "Tribal Dancing Fox",
+        category: "Цветные скетчи",
+        image_url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
+        likes: 58
+      },
+      {
+        id: 4,
+        title: "Laura Warm Autumn Glow",
+        category: "Цветные скетчи",
+        image_url: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80",
+        likes: 31
+      },
+      {
+        id: 5,
+        title: "Keidran Portrait Digital",
+        category: "Цифровые работы",
+        image_url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80",
+        likes: 89
+      },
+      {
+        id: 6,
+        title: "Tom Fischbach Lineart Color",
+        category: "Покрасы Тома",
+        image_url: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80",
+        likes: 112
       }
-    }
-    function fallbackCopy(text) {
-      const textArea = document.createElement("textarea");
-      textArea.value = text;
-      document.body.appendChild(textArea);
-      textArea.select();
-      try {
-        document.execCommand('copy');
-        alert("Discord ник (@krollvk) скопирован!");
-      } catch (err) {
-        alert("Не удалось скопировать автоматически.");
-      }
-      document.body.removeChild(textArea);
-    }
-
-    // Audio Player Logic
-    const audio = document.getElementById('bgAudio');
-    const playBtn = document.getElementById('playBtn');
-    const playIcon = document.getElementById('playIcon');
-    const progressBar = document.getElementById('progressBar');
-    const currentTimeEl = document.getElementById('currentTime');
-    const durationTimeEl = document.getElementById('durationTime');
-
-    audio.volume = 0.7;
-
-    function togglePlay() {
-      if (audio.paused) {
-        audio.play().then(() => {
-          playIcon.className = "fa-solid fa-pause";
-        }).catch(err => console.log("Audio play blocked", err));
-      } else {
-        audio.pause();
-        playIcon.className = "fa-solid fa-play ml-0.5";
-      }
-    }
-
-    audio.addEventListener('timeupdate', () => {
-      if (audio.duration) {
-        const percent = (audio.currentTime / audio.duration) * 100;
-        progressBar.style.width = percent + '%';
-        currentTimeEl.innerText = formatTime(audio.currentTime);
-        durationTimeEl.innerText = formatTime(audio.duration);
-      }
-    });
-
-    function formatTime(secs) {
-      const m = Math.floor(secs / 60);
-      const s = Math.floor(secs % 60);
-      return `${m}:${s < 10 ? '0' : ''}${s}`;
-    }
-
-    function seekAudio(e) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const pos = (e.clientX - rect.left) / rect.width;
-      audio.currentTime = pos * audio.duration;
-    }
-
-    function setVolume(val) {
-      audio.volume = val;
-    }
-
-    // Gallery Data & State Management
-    let galleryData = [
-      { id: 1, title: "Laura Relaxing on Bed", category: "colored-sketches", image: "https://placehold.co/600x400/271812/fdba74?text=Laura+Leash", daLink: "https://www.deviantart.com/krollvk", likes: 24, dislikes: 1 },
-      { id: 2, title: "Seasons of Laura (Summer/Winter)", category: "digital-art", image: "https://placehold.co/600x400/12131c/38bdf8?text=Seasons+of+Laura", daLink: "https://www.deviantart.com/krollvk", likes: 42, dislikes: 0 },
-      { id: 3, title: "Tribal Dancing Fox", category: "tom-fischbach", image: "https://placehold.co/600x400/211e19/eab308?text=Tribal+Dancing", daLink: "https://www.deviantart.com/krollvk", likes: 58, dislikes: 2 },
-      { id: 4, title: "Laura Beach Day Special", category: "digital-art", image: "https://placehold.co/600x400/1b2a38/7dd3fc?text=Laura+Beach+Day", daLink: "https://www.deviantart.com/krollvk", likes: 31, dislikes: 0 },
-      { id: 5, title: "Autumn Leaves Laura", category: "colored-sketches", image: "https://placehold.co/600x400/2a1f11/fde047?text=Autumn+Laura", daLink: "https://www.deviantart.com/krollvk", likes: 19, dislikes: 1 }
     ];
 
+    // APP STATE VARIABLES
+    let currentCategory = "Цветные скетчи";
     let showAllArtworks = false;
-    let activeCategory = 'all';
+    let isAdminLoggedIn = false;
 
+    // --- APP INITIALIZATION ---
+    window.onload = function() {
+      // 1. Intro black overlay screen logic (1 second timer)
+      const intro = document.getElementById('introOverlay');
+      setTimeout(() => {
+        if (intro) {
+          intro.classList.add('opacity-0');
+          setTimeout(() => intro.style.display = 'none', 500);
+        }
+      }, 1000);
+
+      // Load remote data from Supabase if available
+      fetchArtworksFromSupabase();
+    };
+
+    // --- SUPABASE DATABASE FETCH ---
+    async function fetchArtworksFromSupabase() {
+      if (!supabaseClient) {
+        renderGallery();
+        return;
+      }
+      try {
+        const { data, error } = await supabaseClient
+          .from('artworks')
+          .select('*')
+          .order('id', { ascending: false });
+
+        if (!error && data && data.length > 0) {
+          artworksData = data;
+        }
+      } catch (err) {
+        console.warn("Using fallback local data due to Supabase query response:", err);
+      }
+      renderGallery();
+    }
+
+    // --- GALLERY RENDER LOGIC ---
     function renderGallery() {
       const grid = document.getElementById('galleryGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
+      const showMoreContainer = document.getElementById('showMoreContainer');
+      const showMoreBtn = document.getElementById('showMoreBtn');
 
-      const filtered = activeCategory === 'all' ? galleryData : galleryData.filter(item => item.category === activeCategory);
+      // Filter by active category
+      const filtered = artworksData.filter(art => art.category === currentCategory);
 
-      if (filtered.length === 0) {
-        grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 text-sm">В этой категории пока нет артов. Загрузите через админку!</div>`;
-        document.getElementById('showMoreContainer').classList.add('hidden');
+      // Determine items limit (default: 3 items)
+      const limit = showAllArtworks ? filtered.length : 3;
+      const visibleArtworks = filtered.slice(0, limit);
+
+      grid.innerHTML = "";
+
+      if (visibleArtworks.length === 0) {
+        grid.innerHTML = `
+          <div class="col-span-full py-16 text-center text-gray-500 space-y-3">
+            <i class="fa-solid fa-box-open text-4xl"></i>
+            <p class="text-sm font-medium">В этой категории пока нет работ.</p>
+          </div>
+        `;
+        showMoreContainer.classList.add('hidden');
         return;
       }
 
-      // Display initial 3 cards or all cards if toggled
-      const visibleArtworks = showAllArtworks ? filtered : filtered.slice(0, 3);
-
       visibleArtworks.forEach(art => {
-        const userVotedKey = `voted_${art.id}`;
-        const hasVoted = localStorage.getItem(userVotedKey);
-
         const card = document.createElement('div');
-        card.className = "glass-panel rounded-2xl overflow-hidden shadow-xl flex flex-col group";
+        card.className = "group relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col";
+
         card.innerHTML = `
-          <div class="w-full aspect-[4/3] bg-black/40 overflow-hidden relative">
-            <img src="${art.image}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x400/271812/fdba74?text=Art'">
-            <a href="${art.daLink}" target="_blank" class="absolute top-3 right-3 bg-black/70 backdrop-blur-md px-3 py-1 rounded-xl text-[11px] font-medium text-gray-200 hover:text-white border border-white/10 transition">
-              DeviantArt <i class="fa-solid fa-arrow-up-right-from-square ml-1 text-[9px]"></i>
-            </a>
+          <div class="relative aspect-4/3 w-full overflow-hidden bg-black/40">
+            <img src="${art.image_url}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/800x600/1c1411/f97316?text=${encodeURIComponent(art.title)}'">
+            
+            <!-- ADMIN DELETE BUTTON (DIRECT ON CARD) -->
+            ${isAdminLoggedIn ? `
+              <button onclick="deleteArtwork(${art.id})" title="Удалить арт" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-xl bg-red-600/90 hover:bg-red-500 text-white flex items-center justify-center shadow-lg transition backdrop-blur-sm">
+                <i class="fa-solid fa-trash-can text-sm"></i>
+              </button>
+            ` : ''}
           </div>
-          <div class="p-4 flex flex-col flex-grow justify-between space-y-3">
-            <h4 class="font-bold text-sm">${art.title}</h4>
-            <div class="flex items-center justify-between pt-2 border-t border-white/10 text-xs">
-              <div class="flex items-center space-x-3">
-                <button onclick="reactArt(${art.id}, 'like')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-black/30 hover:bg-red-500/20 text-red-400 border border-white/10 transition ${hasVoted ? 'opacity-75 cursor-default' : ''}">
-                  <i class="fa-solid fa-heart"></i> <span>${art.likes}</span>
-                </button>
-                <button onclick="reactArt(${art.id}, 'dislike')" class="flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-black/30 hover:bg-gray-700 text-gray-400 border border-white/10 transition ${hasVoted ? 'opacity-75 cursor-default' : ''}">
-                  <i class="fa-solid fa-thumbs-down"></i> <span>${art.dislikes}</span>
-                </button>
-              </div>
-              <span class="text-[10px] text-gray-500 uppercase tracking-wider">${art.category}</span>
+
+          <div class="p-5 flex flex-col justify-between flex-grow space-y-4">
+            <div>
+              <span class="text-[10px] font-bold uppercase tracking-wider text-theme-accent">${art.category}</span>
+              <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-theme-accent transition line-clamp-1">${art.title}</h3>
+            </div>
+
+            <div class="flex items-center justify-between pt-3 border-t border-white/5">
+              <!-- DIRECT SUPABASE LIKES INCREMENT BUTTON -->
+              <button onclick="likeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition group/like">
+                <i class="fa-solid fa-heart text-red-500 group-hover/like:scale-125 transition duration-200"></i>
+                <span id="likes-count-${art.id}">${art.likes || 0}</span>
+              </button>
+
+              <span class="text-[11px] text-gray-500 font-medium">KrollvK Art</span>
             </div>
           </div>
         `;
         grid.appendChild(card);
       });
 
-      // Handle Show More Button Visibility & Icon
-      const showMoreBtn = document.getElementById('showMoreBtn');
-      const showMoreContainer = document.getElementById('showMoreContainer');
-
-      if (filtered.length <= 3) {
-        showMoreContainer.classList.add('hidden');
-      } else {
+      // Pagination button state
+      if (filtered.length > 3) {
         showMoreContainer.classList.remove('hidden');
-        if (showAllArtworks) {
-          showMoreBtn.querySelector('span').innerText = "Свернуть обратно";
-          document.getElementById('showMoreIcon').className = "fa-solid fa-chevron-up";
-        } else {
-          showMoreBtn.querySelector('span').innerText = `Показать еще ${filtered.length - 3} артов`;
-          document.getElementById('showMoreIcon').className = "fa-solid fa-chevron-down";
-        }
+        showMoreBtn.innerHTML = showAllArtworks 
+          ? `<span>Скрыть часть</span> <i class="fa-solid fa-chevron-up"></i>` 
+          : `<span>Показать больше (${filtered.length - 3})</span> <i class="fa-solid fa-chevron-down"></i>`;
+      } else {
+        showMoreContainer.classList.add('hidden');
       }
     }
 
-    function toggleShowAllArt() {
+    // --- CATEGORY SWITCHER ---
+    function setCategory(catName) {
+      currentCategory = catName;
+      showAllArtworks = false; // Reset pagination limit on category change
+
+      document.querySelectorAll('.category-btn').forEach(btn => {
+        btn.className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5";
+      });
+
+      if (catName === 'Цветные скетчи') {
+        document.getElementById('cat-Colored').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
+      } else if (catName === 'Цифровые работы') {
+        document.getElementById('cat-Digital').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
+      } else if (catName === 'Покрасы Тома') {
+        document.getElementById('cat-Tom').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
+      }
+
+      renderGallery();
+    }
+
+    function toggleShowAll() {
       showAllArtworks = !showAllArtworks;
       renderGallery();
     }
 
-    function filterGallery(cat, btn) {
-      activeCategory = cat;
-      showAllArtworks = false;
-      document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('bg-orange-600', 'text-white', 'border-orange-500'));
-      btn.classList.add('bg-orange-600', 'text-white', 'border-orange-500');
-      renderGallery();
-    }
+    // --- DIRECT LIKES INCREMENT IN SUPABASE DATABASE ---
+    async function likeArtwork(id) {
+      const art = artworksData.find(a => a.id === id);
+      if (!art) return;
 
-    // Reaction Logic (1 vote limit)
-    function reactArt(id, type) {
-      const votedKey = `voted_${id}`;
-      if (localStorage.getItem(votedKey)) {
-        alert("Вы уже голосовали за эту работу!");
-        return;
+      // Local optimistic update
+      art.likes = (art.likes || 0) + 1;
+      const countEl = document.getElementById(`likes-count-${id}`);
+      if (countEl) countEl.innerText = art.likes;
+
+      showToast("Спасибо за лайк! ❤️");
+
+      // Direct Database update (Fetch current -> Add 1 -> Update Row)
+      if (supabaseClient) {
+        try {
+          // 1. Fetch current likes value directly from table row
+          const { data: row, error: fetchErr } = await supabaseClient
+            .from('artworks')
+            .select('likes')
+            .eq('id', id)
+            .single();
+
+          const currentLikes = (!fetchErr && row && typeof row.likes === 'number') ? row.likes : art.likes - 1;
+          const newLikes = currentLikes + 1;
+
+          // 2. Direct UPDATE query to Supabase
+          const { error: updateErr } = await supabaseClient
+            .from('artworks')
+            .update({ likes: newLikes })
+            .eq('id', id);
+
+          if (updateErr) {
+            console.warn("Direct Supabase update error:", updateErr);
+          }
+        } catch (err) {
+          console.warn("Likes operation error:", err);
+        }
       }
-      const art = galleryData.find(a => a.id === id);
-      if (art) {
-        if (type === 'like') art.likes++;
-        if (type === 'dislike') art.dislikes++;
-        localStorage.setItem(votedKey, type);
-        renderGallery();
-      }
     }
 
-    // Commission Calculator
-    function calculateTotal() {
-      const typeRadio = document.querySelector('input[name="commType"]:checked');
-      const base = typeRadio ? parseInt(typeRadio.value) : 30;
-      const colorChecked = document.getElementById('colorAddon').checked;
-      const coloringFee = colorChecked ? 35 : 0;
-      const total = base + coloringFee;
-      document.getElementById('totalPrice').innerText = `$${total}.00`;
-    }
-
-    function sendOrderEmail() {
-      const typeRadio = document.querySelector('input[name="commType"]:checked');
-      const typeName = typeRadio ? typeRadio.parentElement.textContent.trim() : "Портрет";
-      const colorChecked = document.getElementById('colorAddon').checked;
-      const total = document.getElementById('totalPrice').innerText;
-
-      const subject = encodeURIComponent(`Commission Order: ${typeName}`);
-      const body = encodeURIComponent(`Привет, KrollvK!\n\nЯ хочу заказать арт:\n- Тип: ${typeName}\n- Сложный покрас (+$35): ${colorChecked ? 'Да' : 'Нет'}\n- Итоговая стоимость: ${total}\n- Способ оплаты: Криптовалюта (USDT/BTC/ETH)\n\n[Опишите вашу идею или приложите референсы здесь]`);
-      
-      window.location.href = `mailto:krollvak615@gmail.com?subject=${subject}&body=${body}`;
-    }
-
-    // Admin Modal & Password Auth
+    // --- ADMIN AUTHENTICATION (PASSWORD: LAURATOP25) ---
     function openAdminModal() {
       document.getElementById('adminModal').classList.remove('hidden');
     }
     function closeAdminModal() {
       document.getElementById('adminModal').classList.add('hidden');
     }
-    function checkAdminPass() {
-      const pass = document.getElementById('adminPassInput').value;
-      if (pass === 'LAURATOP25') {
-        document.getElementById('adminLoginView').classList.add('hidden');
+
+    function handleAdminAuth(e) {
+      e.preventDefault();
+      const pwd = document.getElementById('adminPasswordInput').value;
+
+      if (pwd === "LAURATOP25") {
+        isAdminLoggedIn = true;
+        document.getElementById('adminAuthView').classList.add('hidden');
         document.getElementById('adminDashboardView').classList.remove('hidden');
+        document.getElementById('adminPasswordInput').value = "";
+        showToast("Успешный вход в админку!");
+        renderGallery(); // Re-render to display delete buttons on cards
       } else {
-        alert('Неверный пароль!');
+        showToast("Неверный пароль!", true);
       }
     }
 
-    function setTheme(themeName, btn) {
-      document.documentElement.setAttribute('data-theme', themeName);
-      document.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('ring-2', 'ring-white'));
-      if (btn) btn.classList.add('ring-2', 'ring-white');
-    }
-
-    function toggleGlass() {
-      const html = document.documentElement;
-      const current = html.getAttribute('data-glass');
-      const next = current === 'on' ? 'off' : 'on';
-      html.setAttribute('data-glass', next);
-      document.getElementById('glassToggleBtn').innerText = next === 'on' ? 'Вкл' : 'Выкл';
-    }
-
-    // File Explorer Upload to Supabase Storage & Gallery
-    async function addNewArt() {
-      const title = document.getElementById('newArtTitle').value || "Laura Fanart Sketch";
-      const cat = document.getElementById('newArtCat').value;
-      const fileInput = document.getElementById('newArtFile');
-      
-      let imageUrl = "https://placehold.co/600x400/271812/fdba74?text=Laura+Art";
-
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        if (supabaseClient) {
-          try {
-            const fileName = `art_${Date.now()}_${file.name}`;
-            const { data, error } = await supabaseClient.storage.from('artworks').upload(fileName, file);
-            if (!error && data) {
-              const { data: publicURL } = supabaseClient.storage.from('artworks').getPublicUrl(fileName);
-              if (publicURL && publicURL.publicUrl) {
-                imageUrl = publicURL.publicUrl;
-              }
-            }
-          } catch(err) {
-            console.log("Supabase storage fallback reader", err);
-          }
-        }
-        if (imageUrl.includes('placehold.co')) {
-          imageUrl = URL.createObjectURL(file);
-        }
-      }
-
-      galleryData.unshift({
-        id: Date.now(),
-        title: title,
-        category: cat,
-        image: imageUrl,
-        daLink: "https://www.deviantart.com/krollvk",
-        likes: 1,
-        dislikes: 0
-      });
-      
-      showAllArtworks = true; // Show all to highlight new upload
+    function adminLogout() {
+      isAdminLoggedIn = false;
+      document.getElementById('adminAuthView').classList.remove('hidden');
+      document.getElementById('adminDashboardView').classList.add('hidden');
+      closeAdminModal();
       renderGallery();
-      alert("Новый арт успешно загружен и опубликован!");
+      showToast("Вы вышли из админ-панели");
+    }
+
+    // --- ADMIN CAPABILITY: DELETE ARTWORK DIRECTLY ---
+    async function deleteArtwork(id) {
+      if (!confirm("Вы уверены, что хотите удалить этот арт из базы?")) return;
+
+      artworksData = artworksData.filter(a => a.id !== id);
+      renderGallery();
+      showToast("Арт удален");
+
+      if (supabaseClient) {
+        try {
+          await supabaseClient
+            .from('artworks')
+            .delete()
+            .eq('id', id);
+        } catch (err) {
+          console.warn("Delete artwork database error:", err);
+        }
+      }
+    }
+
+    // --- ADMIN CAPABILITY: UPLOAD NEW ARTWORK VIA FILE PICKER ---
+    async function addNewArt() {
+      const title = document.getElementById('artTitle').value.trim();
+      const category = document.getElementById('artCategory').value;
+      const fileInput = document.getElementById('artFile');
+
+      if (!title) {
+        showToast("Введите название арта!", true);
+        return;
+      }
+
+      let imageUrl = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80";
+
+      // Upload file to Supabase Storage if file is selected
+      if (fileInput.files && fileInput.files[0] && supabaseClient) {
+        const file = fileInput.files[0];
+        const fileName = `${Date.now()}_${file.name}`;
+        
+        try {
+          const { data, error } = await supabaseClient.storage
+            .from('artworks')
+            .upload(fileName, file);
+
+          if (!error && data) {
+            const { data: publicUrlData } = supabaseClient.storage
+              .from('artworks')
+              .getPublicUrl(fileName);
+            
+            if (publicUrlData && publicUrlData.publicUrl) {
+              imageUrl = publicUrlData.publicUrl;
+            }
+          }
+        } catch (err) {
+          console.warn("Storage upload error fallback:", err);
+        }
+      } else if (fileInput.files && fileInput.files[0]) {
+        imageUrl = URL.createObjectURL(fileInput.files[0]);
+      }
+
+      const newArt = {
+        id: Date.now(),
+        title,
+        category,
+        image_url: imageUrl,
+        likes: 0
+      };
+
+      // Insert record to Supabase Table
+      if (supabaseClient) {
+        try {
+          const { data, error } = await supabaseClient
+            .from('artworks')
+            .insert([{ title, category, image_url: imageUrl, likes: 0 }])
+            .select();
+
+          if (!error && data && data[0]) {
+            newArt.id = data[0].id;
+          }
+        } catch (err) {
+          console.warn("Table insert error:", err);
+        }
+      }
+
+      artworksData.unshift(newArt);
+      currentCategory = category;
+      setCategory(category);
+      showToast("Новый арт успешно опубликован!");
+      
+      // Reset inputs & close modal
+      document.getElementById('artTitle').value = "";
+      fileInput.value = "";
       closeAdminModal();
     }
 
-    window.onload = function() {
-      updateDaysCounter();
-      renderGallery();
-      calculateTotal();
-    };
+    // --- ADMIN CAPABILITY: UPLOAD BANNER & UPDATE TITLE ---
+    async function updateBanner() {
+      const bannerText = document.getElementById('adminBannerText').value.trim();
+      const fileInput = document.getElementById('adminBannerFile');
+      const bannerImg = document.getElementById('bannerImg');
+      const bannerBadge = document.getElementById('bannerBadge');
+
+      if (bannerText && bannerBadge) {
+        bannerBadge.innerText = bannerText;
+      }
+
+      if (fileInput.files && fileInput.files[0]) {
+        const file = fileInput.files[0];
+        let imageUrl = URL.createObjectURL(file);
+
+        if (supabaseClient) {
+          try {
+            const fileName = `banner_${Date.now()}_${file.name}`;
+            const { data, error } = await supabaseClient.storage
+              .from('artworks')
+              .upload(fileName, file);
+
+            if (!error && data) {
+              const { data: publicUrlData } = supabaseClient.storage
+                .from('artworks')
+                .getPublicUrl(fileName);
+
+              if (publicUrlData && publicUrlData.publicUrl) {
+                imageUrl = publicUrlData.publicUrl;
+              }
+            }
+          } catch(err) {
+            console.warn("Banner upload error:", err);
+          }
+        }
+        if (bannerImg) bannerImg.src = imageUrl;
+      }
+
+      showToast("Баннер успешно обновлен!");
+      closeAdminModal();
+    }
+
+    // --- THEME & GLASSMORPHISM SWITCHER ---
+    function setTheme(themeName) {
+      document.documentElement.setAttribute('data-theme', themeName);
+      showToast(`Тема изменена: ${themeName}`);
+    }
+
+    function toggleGlass() {
+      const current = document.documentElement.getAttribute('data-glass');
+      const next = current === 'on' ? 'off' : 'on';
+      document.documentElement.setAttribute('data-glass', next);
+      
+      const btn = document.getElementById('glassToggleBtn');
+      if (btn) {
+        btn.innerText = next === 'on' ? 'ВКЛ' : 'ВЫКЛ';
+        btn.className = next === 'on' 
+          ? 'px-3 py-1.5 rounded-lg border border-theme-accent bg-theme-accent text-black font-bold transition' 
+          : 'px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 font-bold text-gray-400 transition';
+      }
+    }
+
+    // --- UI TOAST HELPER ---
+    function showToast(msg, isError = false) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      const toastIcon = document.getElementById('toastIcon');
+
+      toastMsg.innerText = msg;
+      if (isError) {
+        toastIcon.className = "fa-solid fa-circle-exclamation text-red-500 text-lg";
+      } else {
+        toastIcon.className = "fa-solid fa-circle-check text-theme-accent text-lg";
+      }
+
+      toast.classList.remove('translate-x-full');
+      setTimeout(() => {
+        toast.classList.add('translate-x-full');
+      }, 3000);
+    }
   </script>
 </body>
 </html>
