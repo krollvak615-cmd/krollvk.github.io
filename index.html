@@ -1,898 +1,481 @@
 <!DOCTYPE html>
-<html lang="ru" data-theme="laura-classic" data-glass="off" class="h-full">
+<html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>KrollvK — Artist Portfolio</title>
-  
-  <!-- Google Fonts & FontAwesome Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  
-  <!-- Tailwind CSS CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  
-  <!-- Supabase JS Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            theme: {
-              accent: 'var(--color-accent)',
-              accentGlow: 'var(--color-accent-glow)',
-              bg: 'var(--color-bg)',
-              card: 'var(--color-card)',
-              text: 'var(--color-text)',
-              border: 'var(--color-border)',
-            }
-          }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrollvK — Портфолио артов</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <!-- Supabase SDK -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #12100e;
+            color: #f3efe6;
+            overflow-x: hidden;
         }
-      }
-    }
-  </script>
-
-  <style>
-    /* CSS Variables for Themes */
-    :root[data-theme="laura-classic"] {
-      --color-accent: #f97316;
-      --color-accent-glow: rgba(249, 115, 22, 0.4);
-      --color-bg: #120c0a;
-      --color-card: #1c1411;
-      --color-text: #f3f4f6;
-      --color-border: rgba(249, 115, 22, 0.25);
-    }
-    :root[data-theme="laura-sunset"] {
-      --color-accent: #ef4444;
-      --color-accent-glow: rgba(239, 68, 68, 0.4);
-      --color-bg: #1a0a0f;
-      --color-card: #281219;
-      --color-text: #fbf1f2;
-      --color-border: rgba(239, 68, 68, 0.25);
-    }
-    :root[data-theme="laura-summer"] {
-      --color-accent: #84cc16;
-      --color-accent-glow: rgba(132, 204, 22, 0.4);
-      --color-bg: #0b1409;
-      --color-card: #142211;
-      --color-text: #f4fbf0;
-      --color-border: rgba(132, 204, 22, 0.25);
-    }
-    :root[data-theme="laura-autumn"] {
-      --color-accent: #d97706;
-      --color-accent-glow: rgba(217, 119, 6, 0.4);
-      --color-bg: #170e06;
-      --color-card: #24170c;
-      --color-text: #fdf8f0;
-      --color-border: rgba(217, 119, 6, 0.25);
-    }
-    :root[data-theme="laura-snow"] {
-      --color-accent: #38bdf8;
-      --color-accent-glow: rgba(56, 189, 248, 0.4);
-      --color-bg: #09131a;
-      --color-card: #101f2b;
-      --color-text: #f0f9ff;
-      --color-border: rgba(56, 189, 248, 0.25);
-    }
-    :root[data-theme="cyberpunk"] {
-      --color-accent: #06b6d4;
-      --color-accent-glow: rgba(6, 182, 212, 0.4);
-      --color-bg: #09090b;
-      --color-card: #18181b;
-      --color-text: #fafafa;
-      --color-border: rgba(6, 182, 212, 0.3);
-    }
-    :root[data-theme="emerald"] {
-      --color-accent: #10b981;
-      --color-accent-glow: rgba(16, 185, 129, 0.4);
-      --color-bg: #06120e;
-      --color-card: #0d211a;
-      --color-text: #ecfdf5;
-      --color-border: rgba(16, 185, 129, 0.25);
-    }
-    :root[data-theme="amethyst"] {
-      --color-accent: #a855f7;
-      --color-accent-glow: rgba(168, 85, 247, 0.4);
-      --color-bg: #120917;
-      --color-card: #1e1027;
-      --color-text: #faf5ff;
-      --color-border: rgba(168, 85, 247, 0.25);
-    }
-    :root[data-theme="midnight"] {
-      --color-accent: #6366f1;
-      --color-accent-glow: rgba(99, 102, 241, 0.4);
-      --color-bg: #080b14;
-      --color-card: #101628;
-      --color-text: #eef2ff;
-      --color-border: rgba(99, 102, 241, 0.25);
-    }
-    :root[data-theme="sakura"] {
-      --color-accent: #ec4899;
-      --color-accent-glow: rgba(236, 72, 153, 0.4);
-      --color-bg: #170810;
-      --color-card: #27101c;
-      --color-text: #fdf2f8;
-      --color-border: rgba(236, 72, 153, 0.25);
-    }
-    :root[data-theme="gold"] {
-      --color-accent: #eab308;
-      --color-accent-glow: rgba(234, 179, 8, 0.4);
-      --color-bg: #141107;
-      --color-card: #241f0d;
-      --color-text: #fefce8;
-      --color-border: rgba(234, 179, 8, 0.25);
-    }
-    :root[data-theme="monochrome"] {
-      --color-accent: #e5e7eb;
-      --color-accent-glow: rgba(229, 231, 235, 0.2);
-      --color-bg: #0a0a0a;
-      --color-card: #171717;
-      --color-text: #ffffff;
-      --color-border: rgba(255, 255, 255, 0.15);
-    }
-
-    body {
-      background-color: var(--color-bg);
-      color: var(--color-text);
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    .bg-theme-accent { background-color: var(--color-accent); }
-    .text-theme-accent { color: var(--color-accent); }
-    .border-theme-accent { border-color: var(--color-accent); }
-    .bg-theme-card { background-color: var(--color-card); }
-    .border-theme-custom { border-color: var(--color-border); }
-
-    .glow-effect {
-      text-shadow: 0 0 25px var(--color-accent-glow), 0 0 45px var(--color-accent);
-    }
-    .box-glow {
-      box-shadow: 0 0 20px -5px var(--color-accent-glow);
-    }
-
-    /* Glassmorphism Styles */
-    [data-glass="on"] .glass-card {
-      background-color: rgba(255, 255, 255, 0.03) !important;
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      border: 1px solid rgba(255, 255, 255, 0.12) !important;
-    }
-    [data-glass="on"] .glass-nav {
-      background-color: rgba(18, 12, 10, 0.5) !important;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    .no-scrollbar::-webkit-scrollbar {
-      display: none;
-    }
-    .no-scrollbar {
-      -ms-overflow-style: none;
-      scrollbar-width: none;
-    }
-  </style>
+        /* Стекло (Glassmorphism) */
+        .glass-panel {
+            background: rgba(28, 24, 21, 0.75);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glass-card {
+            background: rgba(24, 20, 17, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            transition: all 0.3s ease;
+        }
+        .glass-card:hover {
+            border-color: rgba(255, 255, 255, 0.18);
+            transform: translateY(-4px);
+        }
+        /* Кастомный скроллбар */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12100e;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #332b25;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4a3e35;
+        }
+    </style>
 </head>
-<body class="min-h-full flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
+<body class="min-l-screen flex flex-col selection:bg-amber-500 selection:text-black">
 
-  <!-- 1. INTRO OVERLAY (1 SECOND BLACK SCREEN WITH GLOWING K) -->
-  <div id="introOverlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center transition-opacity duration-500 ease-out">
-    <span class="text-8xl font-black text-theme-accent glow-effect animate-pulse tracking-tighter">K</span>
-  </div>
-
-  <!-- NOTIFICATION TOAST -->
-  <div id="toast" class="fixed top-5 right-5 z-50 transform translate-x-full transition-transform duration-300 ease-in-out max-w-md bg-theme-card border border-theme-custom px-4 py-3 rounded-2xl shadow-2xl flex items-center gap-3">
-    <i id="toastIcon" class="fa-solid fa-circle-check text-theme-accent text-lg"></i>
-    <span id="toastMsg" class="text-sm font-medium">Уведомление</span>
-  </div>
-
-  <!-- NAVIGATION BAR -->
-  <header class="sticky top-0 z-40 w-full border-b border-white/5 bg-theme-bg/80 backdrop-blur-md glass-nav transition-colors duration-300">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
-      <!-- LOGO: "Krollv" IN WHITE + "K" IN ACCENT -->
-      <a href="#" class="flex items-center gap-1 group">
-        <span class="text-2xl sm:text-3xl font-black tracking-tight text-white group-hover:opacity-90 transition">Krollv</span>
-        <span class="text-2xl sm:text-3xl font-black tracking-tight text-theme-accent glow-effect">K</span>
-      </a>
-
-      <!-- CONTROLS & ADMIN BUTTON -->
-      <div class="flex items-center gap-3 sm:gap-4">
-        <button onclick="openAdminModal()" class="px-4 py-2 text-xs sm:text-sm font-bold rounded-xl border border-theme-custom bg-theme-card hover:bg-white/5 text-theme-accent transition flex items-center gap-2 box-glow">
-          <i class="fa-solid fa-user-shield"></i>
-          <span>Админка</span>
-        </button>
-      </div>
+    <!-- Интро-экран (1 сек) -->
+    <div id="intro-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#12100e] transition-opacity duration-700">
+        <div class="text-6xl font-extrabold tracking-wider text-amber-500 animate-pulse">K</div>
     </div>
-  </header>
 
-  <!-- MAIN CONTENT CONTAINER -->
-  <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-
-    <!-- HEADER BANNER SECTION -->
-    <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-2xl group">
-      <div class="relative h-48 sm:h-64 md:h-80 w-full overflow-hidden">
-        <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
-        <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
-      </div>
-      
-      <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theme-accent/20 border border-theme-accent/40 text-theme-accent text-xs font-semibold mb-2 backdrop-blur-sm">
-            <i class="fa-solid fa-sparkles"></i>
-            <span id="bannerBadge">✨ Latest Tom Fischbach sketch color</span>
-          </div>
-          <h1 id="bannerTitle" class="text-2xl sm:text-4xl font-extrabold text-white tracking-tight drop-shadow-md">
-            Галерея работ KrollvK
-          </h1>
-        </div>
-      </div>
-    </section>
-
-    <!-- GALLERY SECTION -->
-    <section class="space-y-6">
-      
-      <!-- CATEGORY TABS (DEFAULT: COLORED SKETCHES, NO ALL BUTTON) -->
-      <div class="flex items-center justify-between border-b border-white/5 pb-4 overflow-x-auto no-scrollbar">
-        <div class="flex items-center gap-2 sm:gap-3" id="categoryContainer">
-          <button onclick="setCategory('Цветные скетчи')" id="cat-Colored" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg">
-            Цветные скетчи
-          </button>
-          <button onclick="setCategory('Цифровые работы')" id="cat-Digital" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5">
-            Цифровые работы
-          </button>
-          <button onclick="setCategory('Покрасы Тома')" id="cat-Tom" class="category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5">
-            Покрасы Тома
-          </button>
-        </div>
-      </div>
-
-      <!-- ARTWORK CARDS GRID -->
-      <div id="galleryGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <!-- Dynamic Cards Inserted Here -->
-      </div>
-
-      <!-- SHOW MORE BUTTON -->
-      <div id="showMoreContainer" class="flex justify-center pt-6 hidden">
-        <button onclick="toggleShowAll()" id="showMoreBtn" class="px-8 py-3 rounded-2xl border border-theme-custom bg-theme-card hover:bg-theme-accent hover:text-black text-theme-accent text-sm font-bold transition duration-300 flex items-center gap-2 shadow-xl box-glow">
-          <span>Показать больше</span>
-          <i class="fa-solid fa-chevron-down"></i>
-        </button>
-      </div>
-    </section>
-  </main>
-
-  <!-- FOOTER -->
-  <footer class="mt-auto border-t border-white/5 bg-theme-card/30 py-8">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
-      <div class="flex items-center gap-2">
-        <span class="font-bold text-white">Krollv<span class="text-theme-accent">K</span></span>
-        <span>© 2026. Styled with Laura (Twokinds) theme.</span>
-      </div>
-      <div class="flex items-center gap-6">
-        <a href="https://deviantart.com" target="_blank" rel="noopener" class="hover:text-theme-accent transition"><i class="fa-brands fa-deviantart text-sm"></i> DeviantArt</a>
-        <a href="https://github.com/krollvak615-cmd/krollvk.github.io" target="_blank" rel="noopener" class="hover:text-theme-accent transition"><i class="fa-brands fa-github text-sm"></i> GitHub</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- ADMIN MODAL -->
-  <div id="adminModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 hidden">
-    <div class="bg-theme-card border border-theme-custom glass-card rounded-3xl max-w-lg w-full p-6 shadow-2xl relative space-y-6">
-      
-      <!-- Close Button -->
-      <button onclick="closeAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-lg transition">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
-
-      <!-- AUTH FORM (NO PASSWORD HINT) -->
-      <div id="adminAuthView" class="space-y-4">
-        <div class="text-center space-y-1">
-          <div class="w-12 h-12 rounded-2xl bg-theme-accent/20 border border-theme-accent/40 text-theme-accent flex items-center justify-center mx-auto mb-3 text-xl">
-            <i class="fa-solid fa-lock"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white">Панель управления</h3>
-          <p class="text-xs text-gray-400">Введите пароль для доступа к функциям администратора</p>
-        </div>
-
-        <form onsubmit="handleAdminAuth(event)" class="space-y-4">
-          <input type="password" id="adminPasswordInput" placeholder="Введите пароль..." required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-theme-accent transition">
-          <button type="submit" class="w-full py-3 bg-theme-accent text-black font-bold rounded-xl text-sm transition hover:opacity-90 shadow-lg">
-            Войти в систему
-          </button>
-        </form>
-      </div>
-
-      <!-- ADMIN DASHBOARD (VISIBLE ONCE LOGGED IN) -->
-      <div id="adminDashboardView" class="hidden space-y-6 max-h-[75vh] overflow-y-auto pr-1 no-scrollbar">
-        <div class="flex items-center justify-between border-b border-white/10 pb-4">
-          <div>
-            <span class="text-xs text-theme-accent font-bold uppercase tracking-wider">Администратор</span>
-            <h3 class="text-lg font-bold text-white">Управление сайтом</h3>
-          </div>
-          <button onclick="adminLogout()" class="px-3 py-1.5 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-xs font-bold hover:bg-red-500/20 transition">
-            Выйти
-          </button>
-        </div>
-
-        <!-- 1. BANNER CUSTOMIZATION -->
-        <div class="space-y-3 pb-4 border-b border-white/10">
-          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">1. Смена баннера шапки</label>
-          <div class="space-y-3 text-xs">
-            <input type="text" id="adminBannerText" placeholder="Подпись баннера (напр. ✨ Latest Tom Fischbach sketch color)" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
-            <div>
-              <label class="block text-[11px] text-gray-400 mb-1">Изображение баннера:</label>
-              <input type="file" id="adminBannerFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-theme-accent file:text-black hover:file:opacity-90 cursor-pointer bg-black/40 border border-white/10 rounded-xl">
-            </div>
-            <button onclick="updateBanner()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs transition hover:opacity-90 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-image"></i> Обновить баннер
-            </button>
-          </div>
-        </div>
-
-        <!-- 2. UPLOAD NEW ARTWORK -->
-        <div class="space-y-3 pb-4 border-b border-white/10">
-          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">2. Загрузить новый арт</label>
-          <div class="space-y-3 text-xs">
-            <input type="text" id="artTitle" placeholder="Название арта" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
-            <select id="artCategory" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
-              <option value="Цветные скетчи">Цветные скетчи</option>
-              <option value="Цифровые работы">Цифровые работы</option>
-              <option value="Покрасы Тома">Покрасы Тома</option>
-            </select>
-            <div>
-              <label class="block text-[11px] text-gray-400 mb-1">Файл арта:</label>
-              <input type="file" id="artFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-theme-accent file:text-black hover:file:opacity-90 cursor-pointer bg-black/40 border border-white/10 rounded-xl">
-            </div>
-            <button onclick="addNewArt()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs transition hover:opacity-90 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-cloud-arrow-up"></i> Опубликовать арт
-            </button>
-          </div>
-        </div>
-
-        <!-- 3. THEMES & GLASSMORPHISM SWITCHER -->
-        <div class="space-y-3">
-          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">3. Темы оформления (12 тем)</label>
-          
-          <div class="grid grid-cols-2 gap-2 text-xs">
-            <!-- Laura Themes -->
-            <button onclick="setTheme('laura-classic')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-orange-500 text-left flex items-center justify-between">
-              <span>Laura Classic</span>
-              <span class="w-3 h-3 rounded-full bg-orange-500"></span>
-            </button>
-            <button onclick="setTheme('laura-sunset')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-red-500 text-left flex items-center justify-between">
-              <span>Laura Sunset</span>
-              <span class="w-3 h-3 rounded-full bg-red-500"></span>
-            </button>
-            <button onclick="setTheme('laura-summer')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-lime-500 text-left flex items-center justify-between">
-              <span>Laura Summer</span>
-              <span class="w-3 h-3 rounded-full bg-lime-500"></span>
-            </button>
-            <button onclick="setTheme('laura-autumn')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-amber-600 text-left flex items-center justify-between">
-              <span>Laura Autumn</span>
-              <span class="w-3 h-3 rounded-full bg-amber-600"></span>
-            </button>
-            <button onclick="setTheme('laura-snow')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-sky-400 text-left flex items-center justify-between">
-              <span>Laura Snow</span>
-              <span class="w-3 h-3 rounded-full bg-sky-400"></span>
-            </button>
-
-            <!-- Extra Themes -->
-            <button onclick="setTheme('cyberpunk')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-cyan-400 text-left flex items-center justify-between">
-              <span>Cyberpunk</span>
-              <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
-            </button>
-            <button onclick="setTheme('emerald')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-emerald-500 text-left flex items-center justify-between">
-              <span>Emerald</span>
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-            </button>
-            <button onclick="setTheme('amethyst')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-purple-500 text-left flex items-center justify-between">
-              <span>Amethyst</span>
-              <span class="w-3 h-3 rounded-full bg-purple-500"></span>
-            </button>
-            <button onclick="setTheme('midnight')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-indigo-500 text-left flex items-center justify-between">
-              <span>Midnight</span>
-              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-            </button>
-            <button onclick="setTheme('sakura')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-pink-500 text-left flex items-center justify-between">
-              <span>Sakura</span>
-              <span class="w-3 h-3 rounded-full bg-pink-500"></span>
-            </button>
-            <button onclick="setTheme('gold')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-yellow-400 text-left flex items-center justify-between">
-              <span>Gold</span>
-              <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
-            </button>
-            <button onclick="setTheme('monochrome')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-gray-300 text-left flex items-center justify-between">
-              <span>Monochrome</span>
-              <span class="w-3 h-3 rounded-full bg-gray-300"></span>
-            </button>
-          </div>
-
-          <!-- Glassmorphism Toggle -->
-          <div class="pt-2 flex items-center justify-between text-xs">
-            <span class="text-gray-300">Стеклянный эффект (Glassmorphism):</span>
-            <button onclick="toggleGlass()" id="glassToggleBtn" class="px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 font-bold text-gray-400 transition">
-              ВЫКЛ
-            </button>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- APPLICATION SCRIPT LOGIC -->
-  <script>
-    // --- SUPABASE INITIALIZATION ---
-    const SUPABASE_URL = "https://xpgbtirhszniznuwvwql.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwZ2J0aXJoc3puaXpudXd2d3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDAxNzExMDMsImV4cCI6MjA1NTc0NzEwM30.6N_J6KvwR6gZg5cO0wZ9zB9h5kL3oX8uQ5rT2v8Y9w0";
-    
-    let supabaseClient = null;
-    try {
-      if (window.supabase) {
-        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      }
-    } catch (err) {
-      console.warn("Supabase SDK initialization warning:", err);
-    }
-
-    // --- MOCK LOCAL DATA ---
-    let artworksData = [
-      {
-        id: 1,
-        title: "Laura Leash",
-        category: "Цветные скетчи",
-        image_url: "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80",
-        likes: 24
-      },
-      {
-        id: 2,
-        title: "Seasons of Laura (Summer/Winter)",
-        category: "Цветные скетчи",
-        image_url: "https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80",
-        likes: 43
-      },
-      {
-        id: 3,
-        title: "Tribal Dancing Fox",
-        category: "Цветные скетчи",
-        image_url: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=800&q=80",
-        likes: 58
-      },
-      {
-        id: 4,
-        title: "Laura Warm Autumn Glow",
-        category: "Цветные скетчи",
-        image_url: "https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=800&q=80",
-        likes: 31
-      },
-      {
-        id: 5,
-        title: "Keidran Portrait Digital",
-        category: "Цифровые работы",
-        image_url: "https://images.unsplash.com/photo-1541701494587-cb58502866ab?auto=format&fit=crop&w=800&q=80",
-        likes: 89
-      },
-      {
-        id: 6,
-        title: "Tom Fischbach Lineart Color",
-        category: "Покрасы Тома",
-        image_url: "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?auto=format&fit=crop&w=800&q=80",
-        likes: 112
-      }
-    ];
-
-    // APP STATE VARIABLES
-    let currentCategory = "Цветные скетчи";
-    let showAllArtworks = false;
-    let isAdminLoggedIn = false;
-
-    // --- APP INITIALIZATION ---
-    window.onload = function() {
-      // Restore theme & glass state from localStorage
-      const savedTheme = localStorage.getItem('krollvk_theme');
-      if (savedTheme) {
-        document.documentElement.setAttribute('data-theme', savedTheme);
-      }
-      const savedGlass = localStorage.getItem('krollvk_glass');
-      if (savedGlass) {
-        document.documentElement.setAttribute('data-glass', savedGlass);
-        updateGlassBtnUI(savedGlass);
-      }
-
-      // Restore custom banner from localStorage
-      const savedBannerImg = localStorage.getItem('krollvk_banner_url');
-      if (savedBannerImg) {
-        const el = document.getElementById('bannerImg');
-        if (el) el.src = savedBannerImg;
-      }
-      const savedBannerTitle = localStorage.getItem('krollvk_banner_title');
-      if (savedBannerTitle) {
-        const el = document.getElementById('bannerBadge');
-        if (el) el.innerText = savedBannerTitle;
-      }
-
-      // Intro overlay transition
-      const intro = document.getElementById('introOverlay');
-      setTimeout(() => {
-        if (intro) {
-          intro.classList.add('opacity-0');
-          setTimeout(() => intro.style.display = 'none', 500);
-        }
-      }, 1000);
-
-      // Fetch dynamic content
-      fetchArtworksFromSupabase();
-    };
-
-    // --- SUPABASE DATABASE FETCH ---
-    async function fetchArtworksFromSupabase() {
-      if (!supabaseClient) {
-        renderGallery();
-        return;
-      }
-      try {
-        const { data, error } = await supabaseClient
-          .from('artworks')
-          .select('*')
-          .order('id', { ascending: false });
-
-        if (!error && data && data.length > 0) {
-          artworksData = data;
-        }
-      } catch (err) {
-        console.warn("Using fallback local data due to Supabase query response:", err);
-      }
-      renderGallery();
-    }
-
-    // --- GALLERY RENDER LOGIC ---
-    function renderGallery() {
-      const grid = document.getElementById('galleryGrid');
-      const showMoreContainer = document.getElementById('showMoreContainer');
-      const showMoreBtn = document.getElementById('showMoreBtn');
-
-      // Filter by active category
-      const filtered = artworksData.filter(art => art.category === currentCategory);
-
-      // Limit pagination
-      const limit = showAllArtworks ? filtered.length : 3;
-      const visibleArtworks = filtered.slice(0, limit);
-
-      grid.innerHTML = "";
-
-      if (visibleArtworks.length === 0) {
-        grid.innerHTML = `
-          <div class="col-span-full py-16 text-center text-gray-500 space-y-3">
-            <i class="fa-solid fa-box-open text-4xl"></i>
-            <p class="text-sm font-medium">В этой категории пока нет работ.</p>
-          </div>
-        `;
-        showMoreContainer.classList.add('hidden');
-        return;
-      }
-
-      visibleArtworks.forEach(art => {
-        const card = document.createElement('div');
-        card.className = "group relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-xl transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl flex flex-col";
-
-        card.innerHTML = `
-          <div class="relative aspect-4/3 w-full overflow-hidden bg-black/40">
-            <img src="${art.image_url}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/800x600/1c1411/f97316?text=${encodeURIComponent(art.title)}'">
-            
-            ${isAdminLoggedIn ? `
-              <button onclick="deleteArtwork(${art.id})" title="Удалить арт" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-xl bg-red-600/90 hover:bg-red-500 text-white flex items-center justify-center shadow-lg transition backdrop-blur-sm">
-                <i class="fa-solid fa-trash-can text-sm"></i>
-              </button>
-            ` : ''}
-          </div>
-
-          <div class="p-5 flex flex-col justify-between flex-grow space-y-4">
-            <div>
-              <span class="text-[10px] font-bold uppercase tracking-wider text-theme-accent">${art.category}</span>
-              <h3 class="text-base sm:text-lg font-bold text-white group-hover:text-theme-accent transition line-clamp-1">${art.title}</h3>
-            </div>
-
-            <div class="flex items-center justify-between pt-3 border-t border-white/5">
-              <button onclick="likeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition group/like">
-                <i class="fa-solid fa-heart text-red-500 group-hover/like:scale-125 transition duration-200"></i>
-                <span id="likes-count-${art.id}">${art.likes || 0}</span>
-              </button>
-
-              <span class="text-[11px] text-gray-500 font-medium">KrollvK Art</span>
-            </div>
-          </div>
-        `;
-        grid.appendChild(card);
-      });
-
-      if (filtered.length > 3) {
-        showMoreContainer.classList.remove('hidden');
-        showMoreBtn.innerHTML = showAllArtworks 
-          ? `<span>Скрыть часть</span> <i class="fa-solid fa-chevron-up"></i>` 
-          : `<span>Показать больше (${filtered.length - 3})</span> <i class="fa-solid fa-chevron-down"></i>`;
-      } else {
-        showMoreContainer.classList.add('hidden');
-      }
-    }
-
-    // --- CATEGORY SWITCHER ---
-    function setCategory(catName) {
-      currentCategory = catName;
-      showAllArtworks = false;
-
-      document.querySelectorAll('.category-btn').forEach(btn => {
-        btn.className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap text-gray-400 hover:text-white hover:bg-white/5";
-      });
-
-      if (catName === 'Цветные скетчи') {
-        document.getElementById('cat-Colored').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
-      } else if (catName === 'Цифровые работы') {
-        document.getElementById('cat-Digital').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
-      } else if (catName === 'Покрасы Тома') {
-        document.getElementById('cat-Tom').className = "category-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition whitespace-nowrap bg-theme-accent text-black shadow-lg";
-      }
-
-      renderGallery();
-    }
-
-    function toggleShowAll() {
-      showAllArtworks = !showAllArtworks;
-      renderGallery();
-    }
-
-    // --- DIRECT LIKES INCREMENT IN SUPABASE DATABASE ---
-    async function likeArtwork(id) {
-      const art = artworksData.find(a => a.id === id);
-      if (!art) return;
-
-      const newLikesCount = (art.likes || 0) + 1;
-      art.likes = newLikesCount;
-
-      const countEl = document.getElementById(`likes-count-${id}`);
-      if (countEl) countEl.innerText = newLikesCount;
-
-      showToast("Спасибо за лайк! ❤️");
-
-      if (supabaseClient) {
-        try {
-          const { error } = await supabaseClient
-            .from('artworks')
-            .update({ likes: newLikesCount })
-            .eq('id', id);
-
-          if (error) {
-            console.warn("Supabase like update error:", error);
-          }
-        } catch (err) {
-          console.warn("Likes operation failed:", err);
-        }
-      }
-    }
-
-    // --- ADMIN AUTHENTICATION ---
-    function openAdminModal() {
-      document.getElementById('adminModal').classList.remove('hidden');
-    }
-    function closeAdminModal() {
-      document.getElementById('adminModal').classList.add('hidden');
-    }
-
-    function handleAdminAuth(e) {
-      e.preventDefault();
-      const pwd = document.getElementById('adminPasswordInput').value;
-
-      if (pwd === "LAURATOP25") {
-        isAdminLoggedIn = true;
-        document.getElementById('adminAuthView').classList.add('hidden');
-        document.getElementById('adminDashboardView').classList.remove('hidden');
-        document.getElementById('adminPasswordInput').value = "";
-        showToast("Успешный вход в админку!");
-        renderGallery();
-      } else {
-        showToast("Неверный пароль!", true);
-      }
-    }
-
-    function adminLogout() {
-      isAdminLoggedIn = false;
-      document.getElementById('adminAuthView').classList.remove('hidden');
-      document.getElementById('adminDashboardView').classList.add('hidden');
-      closeAdminModal();
-      renderGallery();
-      showToast("Вы вышли из админ-панели");
-    }
-
-    // --- DELETE ARTWORK DIRECTLY ---
-    async function deleteArtwork(id) {
-      if (!confirm("Вы уверены, что хотите удалить этот арт из базы?")) return;
-
-      artworksData = artworksData.filter(a => a.id !== id);
-      renderGallery();
-      showToast("Арт успешно удален");
-
-      if (supabaseClient) {
-        try {
-          await supabaseClient
-            .from('artworks')
-            .delete()
-            .eq('id', id);
-        } catch (err) {
-          console.warn("Database deletion failed:", err);
-        }
-      }
-    }
-
-    // --- UPLOAD NEW ARTWORK VIA FILE PICKER ---
-    async function addNewArt() {
-      const title = document.getElementById('artTitle').value.trim();
-      const category = document.getElementById('artCategory').value;
-      const fileInput = document.getElementById('artFile');
-
-      if (!title) {
-        showToast("Введите название арта!", true);
-        return;
-      }
-
-      let imageUrl = "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80";
-
-      if (fileInput.files && fileInput.files[0] && supabaseClient) {
-        const file = fileInput.files[0];
-        const fileName = `${Date.now()}_${file.name}`;
+    <!-- Шапка сайта с баннером -->
+    <header id="site-header" class="relative w-full h-80 md:h-96 bg-cover bg-center flex flex-col justify-between p-6 md:p-10 transition-all duration-500" style="background-image: linear-gradient(to bottom, rgba(18,16,14,0.4), rgba(18,16,14,0.95)), url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop')">
         
-        try {
-          const { data, error } = await supabaseClient.storage
-            .from('artworks')
-            .upload(fileName, file);
-
-          if (!error && data) {
-            const { data: publicUrlData } = supabaseClient.storage
-              .from('artworks')
-              .getPublicUrl(fileName);
+        <!-- Навигация верхняя -->
+        <div class="max-w-7xl mx-auto w-full flex justify-between items-center z-10">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl font-extrabold tracking-tight text-white">Krollv</span><span id="logo-k" class="text-2xl font-extrabold text-amber-500">K</span>
+            </div>
             
-            if (publicUrlData && publicUrlData.publicUrl) {
-              imageUrl = publicUrlData.publicUrl;
+            <div class="flex items-center gap-3">
+                <!-- Кнопка админки -->
+                <button onclick="toggleAdminModal()" class="glass-panel px-4 py-2 rounded-xl text-xs font-semibold tracking-wider uppercase text-amber-400 hover:bg-white/10 transition flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    Админ-панель
+                </button>
+                <!-- Выбор тем -->
+                <select id="theme-selector" onchange="changeTheme(this.value)" class="glass-panel px-3 py-2 rounded-xl text-xs font-semibold text-white outline-none cursor-pointer">
+                    <option value="amber" class="bg-[#181411]">Янтарь (Классика)</option>
+                    <option value="emerald" class="bg-[#181411]">Изумруд</option>
+                    <option value="cyan" class="bg-[#181411]">Неон Циан</option>
+                    <option value="rose" class="bg-[#181411]">Розовый закат</option>
+                    <option value="purple" class="bg-[#181411]">Пурпурный</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Заголовок в шапке -->
+        <div class="max-w-7xl mx-auto w-full z-10">
+            <h1 id="banner-title" class="text-3xl md:text-5xl font-extrabold text-white tracking-tight drop-shadow-md">Цветные скетчи Тома Фишбаха</h1>
+            <p class="text-sm md:text-base text-gray-300 mt-2">Официальная галерея художественных работ и зарисовок</p>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="max-w-7xl mx-auto w-full px-4 md:px-8 py-8 flex-grow">
+        
+        <!-- Категории (без кнопки "Все") -->
+        <div class="flex flex-wrap items-center gap-3 mb-10" id="category-filters">
+            <button onclick="filterCategory('colored-sketches')" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition bg-amber-500 text-black shadow-lg shadow-amber-500/20" data-cat="colored-sketches">Цветные скетчи</button>
+            <button onclick="filterCategory('digital-art')" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition glass-panel text-gray-300 hover:text-white" data-cat="digital-art">Цифровые работы</button>
+            <button onclick="filterCategory('tom-fischbach')" class="cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition glass-panel text-gray-300 hover:text-white" data-cat="tom-fischbach">Покрасы Тома</button>
+        </div>
+
+        <!-- Сетка артов -->
+        <div id="artworks-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- Динамически загружается через JS -->
+            <div class="col-span-full text-center py-20 text-gray-400">Загрузка галереи...</div>
+        </div>
+
+        <!-- Кнопка "Показать больше" -->
+        <div id="load-more-container" class="text-center mt-12 hidden">
+            <button onclick="showMoreArtworks()" class="glass-panel px-8 py-3 rounded-xl text-sm font-bold text-white hover:bg-white/10 transition border border-white/10">
+                Показать больше
+            </button>
+        </div>
+    </main>
+
+    <!-- Подвал -->
+    <footer class="glass-panel border-t border-white/5 py-8 text-center text-xs text-gray-400 mt-20">
+        <p>© 2026 KrollvK. Все права защищены.</p>
+    </footer>
+
+    <!-- Модальное окно Админ-панели -->
+    <div id="admin-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm hidden p-4">
+        <div class="glass-panel w-full max-w-xl rounded-2xl p-6 md:p-8 relative max-h-[90vh] overflow-y-auto border border-white/10">
+            <button onclick="toggleAdminModal()" class="absolute top-5 right-5 text-gray-400 hover:text-white text-xl font-bold">✕</button>
+            
+            <h2 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                Панель администратора
+            </h2>
+
+            <!-- Форма входа -->
+            <div id="admin-login-section" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-gray-400 mb-1">Пароль администратора</label>
+                    <input type="password" id="admin-pass-input" placeholder="Введите пароль..." class="w-full glass-panel px-4 py-3 rounded-xl text-sm text-white outline-none focus:border-amber-500 transition">
+                </div>
+                <button onclick="checkAdminPassword()" class="w-full py-3 rounded-xl text-sm font-bold bg-amber-500 text-black hover:bg-amber-400 transition shadow-lg shadow-amber-500/20">Войти в панель</button>
+            </div>
+
+            <!-- Управление (скрыто до входа) -->
+            <div id="admin-controls-section" class="space-y-6 hidden">
+                <div class="p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs text-amber-300 flex items-center justify-between">
+                    <span>Статус: Доступ разрешен</span>
+                    <button onclick="logoutAdmin()" class="underline hover:text-white">Выйти</button>
+                </div>
+
+                <!-- Загрузка арта -->
+                <div class="space-y-3 pt-2 border-t border-white/10">
+                    <h3 class="text-sm font-bold text-white">Загрузить новый арт</h3>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Название арта</label>
+                        <input type="text" id="new-art-title" class="w-full glass-panel px-4 py-2.5 rounded-xl text-sm text-white outline-none focus:border-amber-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Категория</label>
+                        <select id="new-art-cat" class="w-full glass-panel px-4 py-2.5 rounded-xl text-sm text-white outline-none focus:border-amber-500">
+                            <option value="colored-sketches" class="bg-[#181411]">Цветные скетчи</option>
+                            <option value="digital-art" class="bg-[#181411]">Цифровые работы</option>
+                            <option value="tom-fischbach" class="bg-[#181411]">Покрасы Тома</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Файл изображения</label>
+                        <input type="file" id="new-art-file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-black hover:file:bg-amber-400 cursor-pointer">
+                    </div>
+                    <button onclick="uploadArtwork()" id="upload-btn" class="w-full py-3 rounded-xl text-sm font-bold bg-amber-500 text-black hover:bg-amber-400 transition shadow-lg shadow-amber-500/20">Загрузить в галерею</button>
+                </div>
+
+                <!-- Смена баннера -->
+                <div class="space-y-3 pt-4 border-t border-white/10">
+                    <h3 class="text-sm font-bold text-white">Изменить шапку сайта</h3>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Заголовок шапки</label>
+                        <input type="text" id="new-banner-title" class="w-full glass-panel px-4 py-2.5 rounded-xl text-sm text-white outline-none focus:border-amber-500" placeholder="Новый заголовок...">
+                    </div>
+                    <div>
+                        <label class="block text-xs text-gray-400 mb-1">Картинка баннера</label>
+                        <input type="file" id="new-banner-file" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-amber-500 file:text-black hover:file:bg-amber-400 cursor-pointer">
+                    </div>
+                    <button onclick="updateBanner()" class="w-full py-3 rounded-xl text-sm font-bold glass-panel text-white hover:bg-white/10 transition border border-white/10">Сохранить баннер</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Скрипты логики -->
+    <script>
+        // Конфигурация Supabase
+        const SUPABASE_URL = 'https://xpgbtirhszniznuwvwql.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhwZ2J0aXJoc3puaXpudXd2d3FsIiwicm9sZSI6ImFub24iLCJpYXQiOjE5MTY2MjczODJ9.4H4p2r5d8t7v9x3z1m0n2b4v6c8x0z2m4n6b8v0c2';
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+        let currentCategory = 'colored-sketches';
+        let allArtworks = [];
+        let visibleLimit = 3;
+        let isAdmin = localStorage.getItem('isAdmin') === 'true';
+
+        // Темы оформления
+        const themes = {
+            amber: { accent: '#f59e0b', ring: 'focus:border-amber-500' },
+            emerald: { accent: '#10b981', ring: 'focus:border-emerald-500' },
+            cyan: { accent: '#06b6d4', ring: 'focus:border-cyan-500' },
+            rose: { accent: '#f43f5e', ring: 'focus:border-rose-500' },
+            purple: { accent: '#a855f7', ring: 'focus:border-purple-500' }
+        };
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // Интро анимация
+            setTimeout(() => {
+                const intro = document.getElementById('intro-screen');
+                intro.style.opacity = '0';
+                setTimeout(() => intro.remove(), 700);
+            }, 1000);
+
+            // Загрузка сохраненной темы
+            const savedTheme = localStorage.getItem('siteTheme') || 'amber';
+            document.getElementById('theme-selector').value = savedTheme;
+            changeTheme(savedTheme, false);
+
+            // Загрузка сохраненного баннера
+            const savedBannerImg = localStorage.getItem('bannerImg');
+            const savedBannerText = localStorage.getItem('bannerText');
+            if (savedBannerImg) {
+                document.getElementById('site-header').style.backgroundImage = `linear-gradient(to bottom, rgba(18,16,14,0.4), rgba(18,16,14,0.95)), url('${savedBannerImg}')`;
             }
-          }
-        } catch (err) {
-          console.warn("Storage upload fallback error:", err);
+            if (savedBannerText) {
+                document.getElementById('banner-title').textContent = savedBannerText;
+                document.getElementById('new-banner-title').value = savedBannerText;
+            }
+
+            fetchArtworks();
+        });
+
+        // Смена темы
+        function changeTheme(themeName, save = true) {
+            const theme = themes[themeName] || themes.amber;
+            document.getElementById('logo-k').style.color = theme.accent;
+            document.querySelectorAll('.cat-btn.bg-amber-500').forEach(btn => {
+                btn.style.backgroundColor = theme.accent;
+            });
+            if (save) localStorage.setItem('siteTheme', themeName);
         }
-      } else if (fileInput.files && fileInput.files[0]) {
-        imageUrl = URL.createObjectURL(fileInput.files[0]);
-      }
 
-      const newArt = {
-        id: Date.now(),
-        title,
-        category,
-        image_url: imageUrl,
-        likes: 0
-      };
+        // Загрузка артов из Supabase
+        async function fetchArtworks() {
+            const grid = document.getElementById('artworks-grid');
+            const { data, error } = await supabase
+                .from('artworks')
+                .select('*')
+                .order('created_at', { ascending: false });
 
-      if (supabaseClient) {
-        try {
-          const { data, error } = await supabaseClient
-            .from('artworks')
-            .insert([{ title, category, image_url: imageUrl, likes: 0 }])
-            .select();
+            if (error) {
+                console.error('Ошибка загрузки:', error);
+                grid.innerHTML = `<div class="col-span-full text-center py-20 text-rose-400">Ошибка загрузки базы данных</div>`;
+                return;
+            }
 
-          if (!error && data && data[0]) {
-            newArt.id = data[0].id;
-          }
-        } catch (err) {
-          console.warn("Table insert error:", err);
+            allArtworks = data || [];
+            renderGallery();
         }
-      }
 
-      artworksData.unshift(newArt);
-      currentCategory = category;
-      setCategory(category);
-      showToast("Новый арт успешно опубликован!");
-      
-      document.getElementById('artTitle').value = "";
-      fileInput.value = "";
-      closeAdminModal();
-    }
+        // Рендер галереи с учетом категорий и лимита
+        function renderGallery() {
+            const grid = document.getElementById('artworks-grid');
+            const filtered = allArtworks.filter(art => art.category === currentCategory);
+            const sliced = filtered.slice(0, visibleLimit);
 
-    // --- UPLOAD BANNER & UPDATE TITLE ---
-    async function updateBanner() {
-      const bannerText = document.getElementById('adminBannerText').value.trim();
-      const fileInput = document.getElementById('adminBannerFile');
-      const bannerImg = document.getElementById('bannerImg');
-      const bannerBadge = document.getElementById('bannerBadge');
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full text-center py-20 text-gray-400">В этой категории пока нет артов</div>`;
+                document.getElementById('load-more-container').classList.add('hidden');
+                return;
+            }
 
-      if (bannerText && bannerBadge) {
-        bannerBadge.innerText = bannerText;
-        localStorage.setItem('krollvk_banner_title', bannerText);
-      }
+            grid.innerHTML = sliced.map(art => `
+                <div class="glass-card rounded-2xl overflow-hidden flex flex-col justify-between group relative">
+                    ${isAdmin ? `
+                        <button onclick="deleteArtwork('${art.id}', '${art.image_url}')" class="absolute top-3 right-3 z-20 bg-rose-600/90 hover:bg-rose-600 text-white p-2 rounded-xl text-xs shadow-lg transition">
+                            Удалить
+                        </button>
+                    ` : ''}
+                    <div class="relative aspect-square overflow-hidden bg-black/40">
+                        <img src="${art.image_url}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+                    </div>
+                    <div class="p-5 flex flex-col gap-3">
+                        <h3 class="font-bold text-white text-lg tracking-tight">${art.title}</h3>
+                        <div class="flex items-center justify-between text-xs text-gray-400">
+                            <button onclick="likeArtwork('${art.id}')" class="flex items-center gap-1.5 glass-panel px-3 py-1.5 rounded-xl text-rose-500 hover:bg-rose-500/10 transition">
+                                ♥ <span>${art.likes || 0}</span>
+                            </button>
+                            <span class="uppercase tracking-wider text-[10px] text-amber-500/80">${art.category}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
 
-      if (fileInput.files && fileInput.files[0]) {
-        const file = fileInput.files[0];
-        let imageUrl = URL.createObjectURL(file);
+            // Кнопка "Показать больше"
+            const loadMoreBtn = document.getElementById('load-more-container');
+            if (filtered.length > visibleLimit) {
+                loadMoreBtn.classList.remove('hidden');
+            } else {
+                loadMoreBtn.classList.add('hidden');
+            }
+        }
 
-        if (supabaseClient) {
-          try {
-            const fileName = `banner_${Date.now()}_${file.name}`;
-            const { data, error } = await supabaseClient.storage
-              .from('artworks')
-              .upload(fileName, file);
+        // Фильтрация категорий
+        function filterCategory(cat) {
+            currentCategory = cat;
+            visibleLimit = 3;
+            document.querySelectorAll('.cat-btn').forEach(btn => {
+                if (btn.dataset.cat === cat) {
+                    btn.className = "cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition bg-amber-500 text-black shadow-lg shadow-amber-500/20";
+                } else {
+                    btn.className = "cat-btn px-5 py-2.5 rounded-xl text-sm font-semibold transition glass-panel text-gray-300 hover:text-white";
+                }
+            });
+            renderGallery();
+        }
 
-            if (!error && data) {
-              const { data: publicUrlData } = supabaseClient.storage
+        function showMoreArtworks() {
+            visibleLimit += 3;
+            renderGallery();
+        }
+
+        // Лайки
+        async function likeArtwork(id) {
+            const art = allArtworks.find(a => a.id === id);
+            if (!art) return;
+            const newLikes = (art.likes || 0) + 1;
+            
+            // Оптимистичное обновление UI
+            art.likes = newLikes;
+            renderGallery();
+
+            await supabase
+                .from('artworks')
+                .update({ likes: newLikes })
+                .eq('id', id);
+        }
+
+        // Управление админкой
+        function toggleAdminModal() {
+            const modal = document.getElementById('admin-modal');
+            modal.classList.toggle('hidden');
+            if (isAdmin) {
+                document.getElementById('admin-login-section').classList.add('hidden');
+                document.getElementById('admin-controls-section').classList.remove('hidden');
+            } else {
+                document.getElementById('admin-login-section').classList.remove('hidden');
+                document.getElementById('admin-controls-section').classList.add('hidden');
+            }
+        }
+
+        function checkAdminPassword() {
+            const pass = document.getElementById('admin-pass-input').value;
+            if (pass === 'LAURATOP25') {
+                isAdmin = true;
+                localStorage.setItem('isAdmin', 'true');
+                document.getElementById('admin-login-section').classList.add('hidden');
+                document.getElementById('admin-controls-section').classList.remove('hidden');
+                renderGallery();
+            } else {
+                alert('Неверный пароль!');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdmin = false;
+            localStorage.removeItem('isAdmin');
+            toggleAdminModal();
+            renderGallery();
+        }
+
+        // Загрузка нового арта
+        async function uploadArtwork() {
+            const title = document.getElementById('new-art-title').value.trim();
+            const category = document.getElementById('new-art-cat').value;
+            const fileInput = document.getElementById('new-art-file');
+            const btn = document.getElementById('upload-btn');
+
+            if (!title || fileInput.files.length === 0) {
+                alert('Заполните название и выберите файл изображения!');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const fileName = `${Date.now()}_${file.name}`;
+
+            btn.textContent = 'Загрузка...';
+            btn.disabled = true;
+
+            const { data: uploadData, error: uploadError } = await supabase.storage
+                .from('artworks')
+                .upload(fileName, file);
+
+            if (uploadError) {
+                alert('Ошибка загрузки файла в Storage: ' + uploadError.message);
+                btn.textContent = 'Загрузить в галерею';
+                btn.disabled = false;
+                return;
+            }
+
+            const { data: publicUrlData } = supabase.storage
                 .from('artworks')
                 .getPublicUrl(fileName);
 
-              if (publicUrlData && publicUrlData.publicUrl) {
-                imageUrl = publicUrlData.publicUrl;
-              }
+            const imageUrl = publicUrlData.publicUrl;
+
+            const { error: dbError } = await supabase
+                .from('artworks')
+                .insert([{ title, category, image_url: imageUrl, likes: 0 }]);
+
+            if (dbError) {
+                alert('Ошибка сохранения в базу данных: ' + dbError.message);
+            } else {
+                alert('Арт успешно загружен!');
+                document.getElementById('new-art-title').value = '';
+                fileInput.value = '';
+                toggleAdminModal();
+                fetchArtworks();
             }
-          } catch(err) {
-            console.warn("Banner upload error:", err);
-          }
+
+            btn.textContent = 'Загрузить в галерею';
+            btn.disabled = false;
         }
-        if (bannerImg) {
-          bannerImg.src = imageUrl;
-          localStorage.setItem('krollvk_banner_url', imageUrl);
+
+        // Удаление арта
+        async function deleteArtwork(id, imageUrl) {
+            if (!confirm('Вы уверены, что хотите удалить этот арт?')) return;
+
+            const { error } = await supabase
+                .from('artworks')
+                .delete()
+                .eq('id', id);
+
+            if (error) {
+                alert('Ошибка удаления: ' + error.message);
+            } else {
+                fetchArtworks();
+            }
         }
-      }
 
-      showToast("Баннер успешно обновлен!");
-      closeAdminModal();
-    }
+        // Смена баннера шапки
+        async function updateBanner() {
+            const titleInput = document.getElementById('new-banner-title').value.trim();
+            const fileInput = document.getElementById('new-banner-file');
 
-    // --- THEME & GLASSMORPHISM SWITCHER WITH LOCALSTORAGE ---
-    function setTheme(themeName) {
-      document.documentElement.setAttribute('data-theme', themeName);
-      localStorage.setItem('krollvk_theme', themeName);
-      showToast(`Тема изменена: ${themeName}`);
-    }
+            if (titleInput) {
+                document.getElementById('banner-title').textContent = titleInput;
+                localStorage.setItem('bannerText', titleInput);
+            }
 
-    function toggleGlass() {
-      const current = document.documentElement.getAttribute('data-glass');
-      const next = current === 'on' ? 'off' : 'on';
-      document.documentElement.setAttribute('data-glass', next);
-      localStorage.setItem('krollvk_glass', next);
-      updateGlassBtnUI(next);
-    }
+            if (fileInput.files.length > 0) {
+                const file = fileInput.files[0];
+                const fileName = `banner_${Date.now()}_${file.name}`;
 
-    function updateGlassBtnUI(state) {
-      const btn = document.getElementById('glassToggleBtn');
-      if (btn) {
-        btn.innerText = state === 'on' ? 'ВКЛ' : 'ВЫКЛ';
-        btn.className = state === 'on' 
-          ? 'px-3 py-1.5 rounded-lg border border-theme-accent bg-theme-accent text-black font-bold transition shadow-md' 
-          : 'px-3 py-1.5 rounded-lg border border-white/10 bg-black/40 font-bold text-gray-400 transition';
-      }
-    }
+                const { data, error } = await supabase.storage
+                    .from('artworks')
+                    .upload(fileName, file);
 
-    // --- UI TOAST HELPER ---
-    function showToast(msg, isError = false) {
-      const toast = document.getElementById('toast');
-      const toastMsg = document.getElementById('toastMsg');
-      const toastIcon = document.getElementById('toastIcon');
+                if (error) {
+                    alert('Ошибка загрузки баннера: ' + error.message);
+                    return;
+                }
 
-      toastMsg.innerText = msg;
-      if (isError) {
-        toastIcon.className = "fa-solid fa-circle-exclamation text-red-500 text-lg";
-      } else {
-        toastIcon.className = "fa-solid fa-circle-check text-theme-accent text-lg";
-      }
+                const { data: publicUrlData } = supabase.storage
+                    .from('artworks')
+                    .getPublicUrl(fileName);
 
-      toast.classList.remove('translate-x-full');
-      setTimeout(() => {
-        toast.classList.add('translate-x-full');
-      }, 3000);
-    }
-  </script>
+                const bannerUrl = publicUrlData.publicUrl;
+                document.getElementById('site-header').style.backgroundImage = `linear-gradient(to bottom, rgba(18,16,14,0.4), rgba(18,16,14,0.95)), url('${bannerUrl}')`;
+                localStorage.setItem('bannerImg', bannerUrl);
+            }
+
+            alert('Шапка сайта обновлена!');
+            toggleAdminModal();
+        }
+    </script>
 </body>
 </html>
