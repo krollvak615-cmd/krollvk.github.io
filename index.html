@@ -58,46 +58,6 @@
       --color-text: #fbf1f2;
       --color-border: rgba(239, 68, 68, 0.25);
     }
-    :root[data-theme="laura-summer"] {
-      --color-accent: #84cc16;
-      --color-accent-glow: rgba(132, 204, 22, 0.4);
-      --color-bg: #0b1409;
-      --color-card: #142211;
-      --color-text: #f4fbf0;
-      --color-border: rgba(132, 204, 22, 0.25);
-    }
-    :root[data-theme="laura-autumn"] {
-      --color-accent: #d97706;
-      --color-accent-glow: rgba(217, 119, 6, 0.4);
-      --color-bg: #170e06;
-      --color-card: #24170c;
-      --color-text: #fdf8f0;
-      --color-border: rgba(217, 119, 6, 0.25);
-    }
-    :root[data-theme="laura-snow"] {
-      --color-accent: #38bdf8;
-      --color-accent-glow: rgba(56, 189, 248, 0.4);
-      --color-bg: #09131a;
-      --color-card: #101f2b;
-      --color-text: #f0f9ff;
-      --color-border: rgba(56, 189, 248, 0.25);
-    }
-    :root[data-theme="cyberpunk"] {
-      --color-accent: #06b6d4;
-      --color-accent-glow: rgba(6, 182, 212, 0.4);
-      --color-bg: #09090b;
-      --color-card: #18181b;
-      --color-text: #fafafa;
-      --color-border: rgba(6, 182, 212, 0.3);
-    }
-    :root[data-theme="emerald"] {
-      --color-accent: #10b981;
-      --color-accent-glow: rgba(16, 185, 129, 0.4);
-      --color-bg: #06120e;
-      --color-card: #0d211a;
-      --color-text: #ecfdf5;
-      --color-border: rgba(16, 185, 129, 0.25);
-    }
     :root[data-theme="amethyst"] {
       --color-accent: #a855f7;
       --color-accent-glow: rgba(168, 85, 247, 0.4);
@@ -105,30 +65,6 @@
       --color-card: #1e1027;
       --color-text: #faf5ff;
       --color-border: rgba(168, 85, 247, 0.25);
-    }
-    :root[data-theme="midnight"] {
-      --color-accent: #6366f1;
-      --color-accent-glow: rgba(99, 102, 241, 0.4);
-      --color-bg: #080b14;
-      --color-card: #101628;
-      --color-text: #eef2ff;
-      --color-border: rgba(99, 102, 241, 0.25);
-    }
-    :root[data-theme="sakura"] {
-      --color-accent: #ec4899;
-      --color-accent-glow: rgba(236, 72, 153, 0.4);
-      --color-bg: #170810;
-      --color-card: #27101c;
-      --color-text: #fdf2f8;
-      --color-border: rgba(236, 72, 153, 0.25);
-    }
-    :root[data-theme="gold"] {
-      --color-accent: #eab308;
-      --color-accent-glow: rgba(234, 179, 8, 0.4);
-      --color-bg: #141107;
-      --color-card: #241f0d;
-      --color-text: #fefce8;
-      --color-border: rgba(234, 179, 8, 0.25);
     }
     :root[data-theme="monochrome"] {
       --color-accent: #e5e7eb;
@@ -147,14 +83,6 @@
       --color-text: #eaf6ff;
       --color-border: rgba(56,189,248, 0.28);
     }
-    :root[data-theme="laura-beach"] {
-      --color-accent: #22d3ee;
-      --color-accent-glow: rgba(34,211,238, 0.4);
-      --color-bg: #1a140c;
-      --color-card: #261d12;
-      --color-text: #fdf6e8;
-      --color-border: rgba(34,211,238, 0.28);
-    }
     :root[data-theme="laura-meadow"] {
       --color-accent: #84cc16;
       --color-accent-glow: rgba(132,204,22, 0.4);
@@ -163,14 +91,19 @@
       --color-text: #f1f8e8;
       --color-border: rgba(132,204,22, 0.28);
     }
-    :root[data-theme="laura-tribal"] {
-      --color-accent: #fbbf24;
-      --color-accent-glow: rgba(251,191,36, 0.4);
-      --color-bg: #1a0a08;
-      --color-card: #2a100c;
-      --color-text: #fff4e0;
-      --color-border: rgba(251,191,36, 0.28);
+
+    :root[data-theme="laura-tail"] {
+      --color-accent: #fb923c;
+      --color-accent-glow: rgba(251, 146, 60, 0.4);
+      --color-bg: #1a0f08;
+      --color-card: #2a1a10;
+      --color-text: #fff3e6;
+      --color-border: rgba(251, 146, 60, 0.3);
     }
+    .fox-tail { display:none; position:fixed; right:-30px; bottom:-20px; width:min(44vw,400px); pointer-events:none; z-index:-1; transform-origin:30% 100%; animation:tailSway 6s ease-in-out infinite }
+    [data-theme="laura-tail"] .fox-tail { display:block }
+    @keyframes tailSway { 0%,100% { transform:rotate(-3deg) } 50% { transform:rotate(4deg) } }
+    @media (prefers-reduced-motion: reduce) { .fox-tail { animation:none } }
 
     body {
       background-color: var(--color-bg);
@@ -222,6 +155,21 @@
 </head>
 <body class="min-h-full flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
 
+  <!-- FOX TAIL (decor for the "Laura Tail" theme) -->
+  <div class="fox-tail" aria-hidden="true">
+    <svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="tailG" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#22110a"/><stop offset=".3" stop-color="#2b160b"/>
+          <stop offset=".42" stop-color="#c2410c"/><stop offset="1" stop-color="#f97316"/>
+        </linearGradient>
+      </defs>
+      <path d="M40 420 C-5 310 15 150 115 62 C170 14 245 8 285 30 C275 95 255 175 205 255 C165 322 125 385 112 420 Z" fill="url(#tailG)"/>
+      <path d="M112 420 C122 350 165 285 200 238 C192 305 168 365 156 420 Z" fill="#fff6ea" opacity=".9"/>
+      <path d="M120 80 C160 50 215 40 262 48 M100 130 C150 95 205 85 255 92" stroke="#000" stroke-opacity=".18" stroke-width="3" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+
   <!-- 1. INTRO OVERLAY (1 SECOND BLACK SCREEN WITH GLOWING K) -->
   <div id="introOverlay" class="fixed inset-0 z-50 bg-black flex items-center justify-center transition-opacity duration-500 ease-out">
     <span class="text-8xl font-black text-theme-accent glow-effect animate-pulse tracking-tighter">K</span>
@@ -265,8 +213,8 @@
 
     <!-- HEADER BANNER SECTION -->
     <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-2xl group">
-      <div class="relative aspect-video w-full overflow-hidden">
-        <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
+      <div class="relative h-44 sm:h-56 lg:h-64 w-full overflow-hidden">
+        <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
       </div>
       
@@ -445,7 +393,7 @@
 
         <!-- 3. THEMES & GLASSMORPHISM SWITCHER -->
         <div class="space-y-3">
-          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">3. Темы оформления (16 тем)</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">3. Темы оформления (7 тем)</label>
           
           <div class="grid grid-cols-2 gap-2 text-xs">
             <!-- Laura Themes -->
@@ -457,59 +405,23 @@
               <span>Laura Sunset</span>
               <span class="w-3 h-3 rounded-full bg-red-500"></span>
             </button>
-            <button onclick="setTheme('laura-summer')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-lime-500 text-left flex items-center justify-between">
-              <span>Laura Summer</span>
-              <span class="w-3 h-3 rounded-full bg-lime-500"></span>
-            </button>
-            <button onclick="setTheme('laura-autumn')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-amber-600 text-left flex items-center justify-between">
-              <span>Laura Autumn</span>
-              <span class="w-3 h-3 rounded-full bg-amber-600"></span>
-            </button>
-            <button onclick="setTheme('laura-snow')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-sky-400 text-left flex items-center justify-between">
-              <span>Laura Snow</span>
-              <span class="w-3 h-3 rounded-full bg-sky-400"></span>
-            </button>
 
             <button onclick="setTheme('laura-pool')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-theme-accent text-left flex items-center justify-between">
               <span>Laura Pool</span>
               <span class="w-3 h-3 rounded-full bg-sky-400"></span>
             </button>
-            <button onclick="setTheme('laura-beach')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-theme-accent text-left flex items-center justify-between">
-              <span>Laura Beach</span>
-              <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
-            </button>
             <button onclick="setTheme('laura-meadow')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-theme-accent text-left flex items-center justify-between">
               <span>Laura Meadow</span>
               <span class="w-3 h-3 rounded-full bg-lime-500"></span>
             </button>
-            <button onclick="setTheme('laura-tribal')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-theme-accent text-left flex items-center justify-between">
-              <span>Laura Tribal</span>
-              <span class="w-3 h-3 rounded-full bg-amber-400"></span>
+            <button onclick="setTheme('laura-tail')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-theme-accent text-left flex items-center justify-between">
+              <span>🦊 Laura Tail</span>
+              <span class="w-3 h-3 rounded-full bg-orange-400"></span>
             </button>
             <!-- Extra Themes -->
-            <button onclick="setTheme('cyberpunk')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-cyan-400 text-left flex items-center justify-between">
-              <span>Cyberpunk</span>
-              <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
-            </button>
-            <button onclick="setTheme('emerald')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-emerald-500 text-left flex items-center justify-between">
-              <span>Emerald</span>
-              <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
-            </button>
             <button onclick="setTheme('amethyst')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-purple-500 text-left flex items-center justify-between">
               <span>Amethyst</span>
               <span class="w-3 h-3 rounded-full bg-purple-500"></span>
-            </button>
-            <button onclick="setTheme('midnight')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-indigo-500 text-left flex items-center justify-between">
-              <span>Midnight</span>
-              <span class="w-3 h-3 rounded-full bg-indigo-500"></span>
-            </button>
-            <button onclick="setTheme('sakura')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-pink-500 text-left flex items-center justify-between">
-              <span>Sakura</span>
-              <span class="w-3 h-3 rounded-full bg-pink-500"></span>
-            </button>
-            <button onclick="setTheme('gold')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-yellow-400 text-left flex items-center justify-between">
-              <span>Gold</span>
-              <span class="w-3 h-3 rounded-full bg-yellow-400"></span>
             </button>
             <button onclick="setTheme('monochrome')" class="p-2 rounded-xl border border-white/10 bg-black/40 hover:border-gray-300 text-left flex items-center justify-between">
               <span>Monochrome</span>
@@ -651,7 +563,7 @@
     window.onload = function() {
       // Restore theme & glass state from localStorage
       const savedTheme = localStorage.getItem('krollvk_theme');
-      if (savedTheme) {
+      if (savedTheme && VALID_THEMES.includes(savedTheme)) {
         document.documentElement.setAttribute('data-theme', savedTheme);
       }
       const savedGlass = localStorage.getItem('krollvk_glass');
@@ -714,7 +626,7 @@
     // --- GLOBAL SETTINGS (theme, glass, banner) FROM SUPABASE ---
     function applySettings(c) {
       if (c.faq) { try { faqItems = JSON.parse(c.faq); } catch {} renderFaq(); }
-      if (c.theme) { document.documentElement.setAttribute('data-theme', c.theme); localStorage.setItem('krollvk_theme', c.theme); }
+      if (c.theme && VALID_THEMES.includes(c.theme)) { document.documentElement.setAttribute('data-theme', c.theme); localStorage.setItem('krollvk_theme', c.theme); }
       if (c.glass) { document.documentElement.setAttribute('data-glass', c.glass); localStorage.setItem('krollvk_glass', c.glass); updateGlassBtnUI(c.glass); }
       if (c.banner_url) { const el = document.getElementById('bannerImg'); if (el) el.src = c.banner_url; localStorage.setItem('krollvk_banner_url', c.banner_url); }
       if (c.banner_title) { const el = document.getElementById('bannerBadge'); if (el) el.innerText = c.banner_title; localStorage.setItem('krollvk_banner_title', c.banner_title); }
@@ -1161,6 +1073,8 @@
       if (error) return dbError('Не удалось удалить', error);
       tracks = tracks.filter(t => t.id !== id); renderPlayer();
     }
+
+    const VALID_THEMES = ['laura-classic','laura-pool','laura-meadow','laura-sunset','amethyst','monochrome','laura-tail'];
 
     // --- UI TOAST HELPER ---
     function showToast(msg, isError = false) {
