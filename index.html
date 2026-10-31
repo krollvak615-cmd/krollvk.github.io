@@ -215,6 +215,9 @@
       -ms-overflow-style: none;
       scrollbar-width: none;
     }
+        .soc { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .95rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(255,255,255,.04); backdrop-filter:blur(10px); font-size:.75rem; font-weight:700; color:#e5e7eb; transition:transform .2s, border-color .2s, box-shadow .2s, color .2s }
+    .soc i { color:var(--c); font-size:1rem }
+    .soc:hover { transform:translateY(-2px); border-color:var(--c); color:#fff; box-shadow:0 6px 18px -8px var(--c) }
   </style>
 </head>
 <body class="min-h-full flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
@@ -242,17 +245,27 @@
         <a href="#contacts" class="hover:text-theme-accent transition">Контакты</a>
       </nav>
       <button onclick="openAdminModal()" class="px-4 py-2 text-xs font-bold rounded-full border border-theme-custom bg-theme-card hover:bg-white/5 text-theme-accent transition flex items-center gap-2 box-glow">
-        <i class="fa-solid fa-user-shield"></i><span class="hidden sm:inline">Админка</span>
+        <i class="fa-solid fa-gear"></i>
       </button>
     </div>
   </header>
 
   <!-- MAIN CONTENT CONTAINER -->
   <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <!-- SOCIALS (top) -->
+    <section id="contacts" class="scroll-mt-28 -mb-6 flex flex-wrap justify-center gap-2">
+      <a class="soc" style="--c:#05cc47" title="krollvk" href="https://www.deviantart.com/krollvk" target="_blank" rel="noopener"><i class="fa-brands fa-deviantart"></i><span>DeviantArt</span></a>
+      <a class="soc" style="--c:#faaf3a" title="krollvk" href="https://www.furaffinity.net/user/krollvk" target="_blank" rel="noopener"><i class="fa-solid fa-paw"></i><span>FurAffinity</span></a>
+      <a class="soc" style="--c:#27a7e7" title="t.me/krollvk" href="https://t.me/krollvk" target="_blank" rel="noopener"><i class="fa-brands fa-telegram"></i><span>Telegram</span></a>
+      <a class="soc" style="--c:#ff4500" title="u/Nice_Ostrich3374" href="https://www.reddit.com/user/Nice_Ostrich3374" target="_blank" rel="noopener"><i class="fa-brands fa-reddit-alien"></i><span>Reddit</span></a>
+      <button class="soc" style="--c:#5865f2" title="@krollvk — нажми, чтобы скопировать" onclick="navigator.clipboard.writeText('krollvk').then(()=>showToast('Discord-ник krollvk скопирован!'))"><i class="fa-brands fa-discord"></i><span>Discord</span></button>
+      <a class="soc" style="--c:var(--color-accent)" title="krollvak615@gmail.com" href="mailto:krollvak615@gmail.com"><i class="fa-solid fa-envelope"></i><span>Email</span></a>
+    </section>
+
 
     <!-- HEADER BANNER SECTION -->
     <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-2xl group">
-      <div class="relative h-48 sm:h-64 md:h-80 w-full overflow-hidden">
+      <div class="relative aspect-video w-full overflow-hidden">
         <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-center group-hover:scale-105 transition duration-700">
         <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
       </div>
@@ -266,6 +279,7 @@
           <h1 id="bannerTitle" class="text-xl sm:text-3xl font-black font-display text-white tracking-tight drop-shadow-md">
             Галерея работ KrollvK
           </h1>
+          <p id="daysCounter" class="mt-2 text-xs sm:text-sm text-gray-200 font-semibold"></p>
         </div>
       </div>
     </section>
@@ -301,10 +315,33 @@
         </button>
       </div>
     </section>
+  
+    <!-- ORDER CALCULATOR -->
+    <section id="order" class="rounded-3xl border border-theme-custom bg-theme-card glass-card p-6 shadow-xl scroll-mt-28 space-y-4">
+      <h2 class="text-lg font-black font-display text-white">Заказать арт</h2>
+      <div class="grid sm:grid-cols-2 gap-3 text-sm">
+        <select id="ordType" onchange="calcOrder()" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
+          <option value="bust">Скетч / лайнарт: Bust — $20</option>
+          <option value="waist">Скетч / лайнарт: Waist/Hips — $30</option>
+          <option value="full">Скетч / лайнарт: Full body — $40</option>
+        </select>
+        <label class="flex items-center gap-2 text-gray-200"><input type="checkbox" id="ordColor" onchange="calcOrder()" class="accent-orange-500 w-4 h-4"> Покрас (+$35)</label>
+      </div>
+      <div class="flex flex-wrap items-center justify-between gap-3">
+        <div class="text-sm text-gray-300">Итого: <span id="ordTotal" class="text-2xl font-black text-theme-accent">$20</span><span class="ml-3 text-xs">Оплата — только криптовалютой</span></div>
+        <button onclick="sendOrder()" class="px-6 py-2.5 bg-theme-accent text-black font-bold rounded-xl text-sm hover:opacity-90"><i class="fa-solid fa-envelope"></i> Заказать по email</button>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section id="faq" class="space-y-3 scroll-mt-28">
+      <h2 class="text-lg font-black font-display text-white">FAQ</h2>
+      <div id="faqList" class="space-y-2"></div>
+    </section>
   </main>
 
   <!-- FOOTER -->
-  <footer id="contacts" class="mt-auto border-t border-white/5 bg-theme-card/30 py-8">
+  <footer class="mt-auto border-t border-white/5 bg-theme-card/30 py-8">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-400">
       <div class="flex items-center gap-2">
         <span class="font-bold text-white">Krollv<span class="text-theme-accent">K</span></span>
@@ -390,6 +427,20 @@
               <i class="fa-solid fa-cloud-arrow-up"></i> Опубликовать арт
             </button>
           </div>
+        </div>
+
+        <!-- 4/5. MUSIC + FAQ -->
+        <div class="space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">Музыка (плеер)</label>
+          <input type="text" id="trackName" placeholder="Название трека" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white text-xs">
+          <input type="file" id="trackFile" accept="audio/*" class="w-full text-xs text-gray-400">
+          <button onclick="addTrack()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs hover:opacity-90">Загрузить трек</button>
+          <div id="adminTracks" class="space-y-1 text-xs text-gray-300"></div>
+        </div>
+        <div class="space-y-3">
+          <label class="block text-xs font-bold uppercase tracking-wider text-theme-accent">FAQ (вопрос — первая строка, ответ — дальше; блоки через пустую строку)</label>
+          <textarea id="faqEdit" rows="8" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white text-xs"></textarea>
+          <button onclick="saveFaq()" class="w-full py-2.5 bg-theme-accent text-black font-bold rounded-xl text-xs hover:opacity-90">Сохранить FAQ</button>
         </div>
 
         <!-- 3. THEMES & GLASSMORPHISM SWITCHER -->
@@ -479,6 +530,19 @@
     </div>
   </div>
 
+  <!-- MUSIC PLAYER -->
+  <div id="playerBar" class="fixed bottom-0 inset-x-0 z-40 hidden bg-theme-bg/90 backdrop-blur-xl border-t border-theme-custom">
+    <div class="h-1 w-full bg-white/10 cursor-pointer" onclick="seekAudio(event)"><div id="progBar" class="h-full bg-theme-accent" style="width:0"></div></div>
+    <div class="max-w-7xl mx-auto px-4 h-14 flex items-center gap-3 text-white text-xs">
+      <button onclick="stepTrack(-1)"><i class="fa-solid fa-backward-step"></i></button>
+      <button onclick="togglePlay()" class="w-9 h-9 rounded-full bg-theme-accent text-black"><i id="playIcon" class="fa-solid fa-play"></i></button>
+      <button onclick="stepTrack(1)"><i class="fa-solid fa-forward-step"></i></button>
+      <span id="trackTitle" class="flex-1 truncate font-semibold"></span>
+      <i class="fa-solid fa-volume-high text-gray-400"></i>
+      <input type="range" min="0" max="1" step="0.05" value="0.5" oninput="audio.volume=this.value" class="w-20 sm:w-28 accent-orange-500">
+    </div>
+  </div>
+
   <!-- LIGHTBOX -->
   <div id="lightbox" class="fixed inset-0 z-[45] hidden bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4" onclick="if(event.target===this)closeLightbox()">
     <button onclick="closeLightbox()" class="absolute top-4 right-4 w-11 h-11 rounded-full bg-white/10 hover:bg-white/20 text-white"><i class="fa-solid fa-xmark"></i></button>
@@ -492,6 +556,8 @@
       </div>
       <div class="flex gap-2 shrink-0">
         <button onclick="likeArtwork(lbId)" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs font-semibold"><i class="fa-solid fa-heart text-red-500"></i><span id="lbLikes">0</span></button>
+        <button onclick="dislikeArtwork(lbId)" class="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs font-semibold"><i class="fa-solid fa-thumbs-down"></i><span id="lbDislikes">0</span></button>
+        <a id="lbLink" target="_blank" rel="noopener" class="hidden px-3 py-2 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs"><i class="fa-brands fa-deviantart"></i></a>
         <button onclick="shareArt(lbId)" class="px-3 py-2 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs"><i class="fa-solid fa-share-nodes"></i></button>
       </div>
     </div>
@@ -502,6 +568,7 @@
     <div class="bg-theme-card border border-theme-custom glass-card rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 text-xs">
       <h3 class="text-base font-bold font-display text-white">Редактировать арт</h3>
       <input type="text" id="editTitle" placeholder="Название" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
+      <input type="text" id="editLink" placeholder="Ссылка на DeviantArt (необязательно)" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
       <select id="editCategory" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-white">
         <option value="Цветные скетчи">Цветные скетчи</option>
         <option value="Цифровые работы">Цифровые работы</option>
@@ -619,6 +686,7 @@
 
     // --- INIT ---
     async function initApp() {
+      renderFaq(); startCounter(); loadTracks();
       await restoreSession();
       await Promise.all([loadSettings(), fetchArtworksFromSupabase()]);
       openFromHash();
@@ -633,7 +701,7 @@
     async function fetchArtworksFromSupabase() {
       if (supabaseClient) {
         const { data, error } = await supabaseClient
-          .from('artworks').select('*').order('id', { ascending: false });
+          .from('artworks').select('*').order('position', { ascending: true }).order('id', { ascending: false });
         if (error) {
           dbError('Не удалось загрузить арты', error);
         } else {
@@ -645,6 +713,7 @@
 
     // --- GLOBAL SETTINGS (theme, glass, banner) FROM SUPABASE ---
     function applySettings(c) {
+      if (c.faq) { try { faqItems = JSON.parse(c.faq); } catch {} renderFaq(); }
       if (c.theme) { document.documentElement.setAttribute('data-theme', c.theme); localStorage.setItem('krollvk_theme', c.theme); }
       if (c.glass) { document.documentElement.setAttribute('data-glass', c.glass); localStorage.setItem('krollvk_glass', c.glass); updateGlassBtnUI(c.glass); }
       if (c.banner_url) { const el = document.getElementById('bannerImg'); if (el) el.src = c.banner_url; localStorage.setItem('krollvk_banner_url', c.banner_url); }
@@ -702,7 +771,7 @@
             <img src="${art.image_url}" alt="${art.title}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/800x600/1c1411/f97316?text=${encodeURIComponent(art.title)}'">
             
             ${isAdminLoggedIn ? `
-              <button onclick="event.stopPropagation();openEdit(${art.id})" title="Редактировать" class="absolute top-3 right-14 z-20 w-9 h-9 rounded-xl bg-black/70 hover:bg-theme-accent hover:text-black text-white flex items-center justify-center shadow-lg transition"><i class="fa-solid fa-pen text-sm"></i></button>
+              <button onclick="event.stopPropagation();openEdit(${art.id})" title="Редактировать" class="absolute top-3 right-14 z-20 w-9 h-9 rounded-xl bg-black/70 hover:bg-theme-accent hover:text-black text-white flex items-center justify-center shadow-lg transition"><i class="fa-solid fa-pen text-sm"></i></button><div class="absolute top-3 left-3 z-20 flex gap-1"><button onclick="event.stopPropagation();moveArt(${art.id},-1)" class="w-8 h-8 rounded-lg bg-black/70 text-white text-xs"><i class="fa-solid fa-arrow-left"></i></button><button onclick="event.stopPropagation();moveArt(${art.id},1)" class="w-8 h-8 rounded-lg bg-black/70 text-white text-xs"><i class="fa-solid fa-arrow-right"></i></button></div>
               <button onclick="event.stopPropagation();deleteArtwork(${art.id})" title="Удалить арт" class="absolute top-3 right-3 z-20 w-9 h-9 rounded-xl bg-red-600/90 hover:bg-red-500 text-white flex items-center justify-center shadow-lg transition backdrop-blur-sm">
                 <i class="fa-solid fa-trash-can text-sm"></i>
               </button>
@@ -716,12 +785,13 @@
             </div>
 
             <div class="flex items-center justify-between pt-3 border-t border-white/5">
-              <button onclick="likeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition group/like">
+              <div class="flex gap-2"><button onclick="likeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition group/like">
                 <i class="fa-solid fa-heart text-red-500 group-hover/like:scale-125 transition duration-200"></i>
                 <span id="likes-count-${art.id}">${art.likes || 0}</span>
               </button>
+              <button onclick="dislikeArtwork(${art.id})" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs font-semibold text-gray-300 transition"><i class="fa-solid fa-thumbs-down"></i><span id="dislikes-count-${art.id}">${art.dislikes || 0}</span></button></div>
 
-              <button onclick="shareArt(${art.id})" title="Поделиться" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition"><i class="fa-solid fa-share-nodes"></i></button>
+              <div class="flex gap-2">${art.link ? `<a href="${art.link}" target="_blank" rel="noopener" title="DeviantArt" class="px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent text-xs text-gray-300"><i class="fa-brands fa-deviantart"></i></a>` : ''}<button onclick="shareArt(${art.id})" title="Поделиться" class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border border-white/10 bg-black/30 hover:border-theme-accent hover:text-theme-accent text-xs font-semibold text-gray-300 transition"><i class="fa-solid fa-share-nodes"></i></button></div>
             </div>
           </div>
         `;
@@ -763,28 +833,36 @@
       renderGallery();
     }
 
-    // --- LIKES (one per browser per art, atomic increment in DB) ---
-    function getLiked() {
-      try { return JSON.parse(localStorage.getItem('krollvk_liked') || '[]'); } catch { return []; }
-    }
-
-    async function likeArtwork(id) {
+    // --- REACTIONS (1 per browser; admin unlimited) ---
+    function getReacted() { try { return JSON.parse(localStorage.getItem('krollvk_react') || '{}'); } catch { return {}; } }
+    async function react(id, type) {
       const art = artworksData.find(a => a.id === id);
-      if (!art) return;
-      const liked = getLiked();
-      if (liked.includes(id)) { showToast("Ты уже лайкнул этот арт ❤️"); return; }
-      if (!supabaseClient) return;
+      if (!art || !supabaseClient) return;
+      const r = getReacted();
+      if (!isAdminLoggedIn && r[id]) return showToast('Ты уже оценил этот арт', true);
+      const { data, error } = await supabaseClient.rpc(type === 'like' ? 'increment_like' : 'increment_dislike', { art_id: id });
+      if (error) return dbError('Реакция не сохранилась', error);
+      const key = type === 'like' ? 'likes' : 'dislikes';
+      art[key] = data;
+      if (!isAdminLoggedIn) { r[id] = type; localStorage.setItem('krollvk_react', JSON.stringify(r)); }
+      [`${key}-count-${id}`, ...(lbId === id ? [type === 'like' ? 'lbLikes' : 'lbDislikes'] : [])].forEach(e => { const el = document.getElementById(e); if (el) el.innerText = data; });
+      showToast(type === 'like' ? 'Спасибо за лайк! ❤️' : 'Реакция учтена');
+    }
+    const likeArtwork = id => react(id, 'like');
+    const dislikeArtwork = id => react(id, 'dislike');
 
-      const { data, error } = await supabaseClient.rpc('increment_like', { art_id: id });
-      if (error) return dbError('Лайк не сохранился', error);
-
-      art.likes = data;
-      liked.push(id);
-      localStorage.setItem('krollvk_liked', JSON.stringify(liked));
-      const countEl = document.getElementById(`likes-count-${id}`);
-      if (countEl) countEl.innerText = data;
-      if (lbId === id) document.getElementById('lbLikes').innerText = data;
-      showToast("Спасибо за лайк! ❤️");
+    // --- REORDER (admin) ---
+    function sortArts() { artworksData.sort((a, b) => (a.position || 0) - (b.position || 0) || b.id - a.id); }
+    async function moveArt(id, d) {
+      const cat = artworksData.find(a => a.id === id).category;
+      const list = artworksData.filter(a => a.category === cat);
+      const i = list.findIndex(a => a.id === id), j = i + d;
+      if (j < 0 || j >= list.length) return;
+      [list[i], list[j]] = [list[j], list[i]];
+      list.forEach((a, k) => a.position = k);
+      sortArts(); renderGallery();
+      const res = await Promise.all(list.map(a => supabaseClient.from('artworks').update({ position: a.position }).eq('id', a.id)));
+      const err = res.find(r => r.error); if (err) dbError('Порядок не сохранился', err.error);
     }
 
     // --- ADMIN AUTHENTICATION (Supabase Auth) ---
@@ -853,7 +931,7 @@
       try {
         const imageUrl = await uploadImage(fileInput.files[0]);
         const { data, error } = await supabaseClient.from('artworks')
-          .insert([{ title, category, image_url: imageUrl, likes: 0 }]).select();
+          .insert([{ title, category, image_url: imageUrl, likes: 0, position: Math.min(0, ...artworksData.map(x => x.position || 0)) - 1 }]).select();
         if (error) throw error;
         artworksData.unshift(data[0]);
       } catch (err) {
@@ -924,6 +1002,8 @@
       document.getElementById('lbImg').src = a.image_url;
       document.getElementById('lbTitle').innerText = a.title;
       document.getElementById('lbCat').innerText = a.category;
+      document.getElementById('lbDislikes').innerText = a.dislikes || 0;
+      const lk = document.getElementById('lbLink'); lk.classList.toggle('hidden', !a.link); if (a.link) lk.href = a.link;
       document.getElementById('lbLikes').innerText = a.likes || 0;
       document.getElementById('lightbox').classList.remove('hidden');
       document.body.style.overflow = 'hidden';
@@ -977,6 +1057,7 @@
       editId = id;
       document.getElementById('editTitle').value = a.title;
       document.getElementById('editCategory').value = a.category;
+      document.getElementById('editLink').value = a.link || '';
       document.getElementById('editModal').classList.remove('hidden');
     }
     function closeEdit() { editId = null; document.getElementById('editModal').classList.add('hidden'); }
@@ -984,14 +1065,101 @@
       if (!isAdminLoggedIn || editId === null) return;
       const title = document.getElementById('editTitle').value.trim();
       const category = document.getElementById('editCategory').value;
+      const link = document.getElementById('editLink').value.trim() || null;
       if (!title) return showToast('Введите название!', true);
-      const { error } = await supabaseClient.from('artworks').update({ title, category }).eq('id', editId);
+      const { error } = await supabaseClient.from('artworks').update({ title, category, link }).eq('id', editId);
       if (error) return dbError('Не удалось сохранить', error);
       const a = artworksData.find(x => x.id === editId);
-      a.title = title; a.category = category;
+      a.title = title; a.category = category; a.link = link;
       closeEdit();
       setCategory(category);
       showToast('Арт обновлён');
+    }
+
+    // --- DAYS COUNTER (since 23 Dec 2025) ---
+    function startCounter() {
+      const start = new Date(2025, 11, 23), el = document.getElementById('daysCounter');
+      const p = n => String(n).padStart(2, '0');
+      const tick = () => {
+        const t = Math.max(0, Date.now() - start), d = Math.floor(t / 864e5);
+        el.innerText = `🎨 Рисую уже ${d} дн. ${p(Math.floor(t / 36e5) % 24)}:${p(Math.floor(t / 6e4) % 60)}:${p(Math.floor(t / 1e3) % 60)}`;
+      };
+      tick(); setInterval(tick, 1000);
+    }
+
+    // --- ORDER CALCULATOR ---
+    const PRICES = { bust: ['Bust', 20], waist: ['Waist/Hips', 30], full: ['Full body', 40] }, COLOR_FEE = 35;
+    function orderTotal() { return PRICES[ordType.value][1] + (ordColor.checked ? COLOR_FEE : 0); }
+    function calcOrder() { ordTotal.innerText = '$' + orderTotal(); }
+    function sendOrder() {
+      const body = `Здравствуйте! Хочу заказать арт.\n\nТип: скетч/лайнарт, ${PRICES[ordType.value][0]}\nПокрас: ${ordColor.checked ? 'да (+$35)' : 'нет'}\nИтого: $${orderTotal()}\nОплата: криптовалюта (укажите предпочтительную монету)\n\nОписание персонажа / референсы:\n\nМой ник / контакт:\n`;
+      location.href = `mailto:krollvak615@gmail.com?subject=${encodeURIComponent('Заказ арта — $' + orderTotal())}&body=${encodeURIComponent(body)}`;
+    }
+
+    // --- FAQ (editable, stored in Supabase) ---
+    let faqItems = [
+      { q: 'Как часто вы рисуете?', a: 'Рисую регулярно, расписание зависит от загрузки и заказов.' },
+      { q: 'На чём вы рисуете?', a: 'На графическом планшете за $10 в Photoshop 2021.' },
+      { q: 'Сколько делается заказ?', a: 'До недели.' },
+      { q: 'Как оплатить?', a: 'Только криптовалютой.' }
+    ];
+    function esc(t) { return String(t).replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c])); }
+    function renderFaq() {
+      document.getElementById('faqList').innerHTML = faqItems.map(f => `<details class="rounded-2xl border border-theme-custom bg-theme-card glass-card px-5 py-3"><summary class="cursor-pointer font-semibold text-sm text-white">${esc(f.q)}</summary><p class="mt-2 text-sm text-gray-300 whitespace-pre-line">${esc(f.a)}</p></details>`).join('');
+      document.getElementById('faqEdit').value = faqItems.map(f => f.q + '\n' + f.a).join('\n\n');
+    }
+    async function saveFaq() {
+      const items = document.getElementById('faqEdit').value.split(/\n\s*\n/).map(b => b.trim().split('\n')).filter(l => l[0])
+        .map(l => ({ q: l[0], a: l.slice(1).join('\n') }));
+      if (!(await saveSetting('faq', JSON.stringify(items)))) return;
+      faqItems = items; renderFaq(); showToast('FAQ сохранён');
+    }
+
+    // --- MUSIC PLAYER ---
+    const audio = new Audio(); audio.preload = 'none'; audio.volume = 0.5;
+    let tracks = [], tIdx = 0;
+    async function loadTracks() {
+      if (!supabaseClient) return;
+      const { data, error } = await supabaseClient.from('tracks').select('*').order('id');
+      if (error) return dbError('Не удалось загрузить музыку', error);
+      tracks = data; renderPlayer();
+    }
+    function renderPlayer() {
+      document.getElementById('playerBar').classList.toggle('hidden', !tracks.length);
+      document.body.style.paddingBottom = tracks.length ? '60px' : '';
+      if (tIdx >= tracks.length) tIdx = 0;
+      if (tracks[tIdx]) document.getElementById('trackTitle').innerText = tracks[tIdx].title;
+      document.getElementById('adminTracks').innerHTML = tracks.map(t => `<div class="flex justify-between"><span>${esc(t.title)}</span><button onclick="deleteTrack(${t.id})" class="text-red-400">✕</button></div>`).join('');
+    }
+    function togglePlay() {
+      if (!tracks.length) return;
+      if (!audio.src) audio.src = tracks[tIdx].url;
+      audio.paused ? audio.play() : audio.pause();
+    }
+    function stepTrack(d) {
+      if (!tracks.length) return;
+      tIdx = (tIdx + d + tracks.length) % tracks.length;
+      audio.src = tracks[tIdx].url; audio.play(); renderPlayer();
+    }
+    function seekAudio(e) { if (audio.duration) audio.currentTime = audio.duration * (e.offsetX / e.currentTarget.clientWidth); }
+    audio.onplay = () => playIcon.className = 'fa-solid fa-pause';
+    audio.onpause = () => playIcon.className = 'fa-solid fa-play';
+    audio.onended = () => stepTrack(1);
+    audio.ontimeupdate = () => progBar.style.width = (audio.duration ? audio.currentTime / audio.duration * 100 : 0) + '%';
+    async function addTrack() {
+      const title = trackName.value.trim(), f = trackFile.files[0];
+      if (!title || !f) return showToast('Введите название и выберите аудиофайл', true);
+      try {
+        const url = await uploadImage(f, 'music_');
+        const { data, error } = await supabaseClient.from('tracks').insert([{ title, url }]).select();
+        if (error) throw error;
+        tracks.push(data[0]); renderPlayer(); trackName.value = ''; trackFile.value = ''; showToast('Трек добавлен');
+      } catch (e) { dbError('Трек не загружен', e); }
+    }
+    async function deleteTrack(id) {
+      const { error } = await supabaseClient.from('tracks').delete().eq('id', id);
+      if (error) return dbError('Не удалось удалить', error);
+      tracks = tracks.filter(t => t.id !== id); renderPlayer();
     }
 
     // --- UI TOAST HELPER ---
