@@ -193,6 +193,12 @@
         .soc { display:inline-flex; align-items:center; gap:.5rem; padding:.5rem .95rem; border-radius:999px; border:1px solid rgba(255,255,255,.12); background:rgba(10,8,14,.6); backdrop-filter:blur(10px); font-size:.75rem; font-weight:700; color:#e5e7eb; transition:transform .2s, border-color .2s, box-shadow .2s, color .2s }
     .soc i { color:var(--c); font-size:1rem }
     .soc:hover { transform:translateY(-2px); border-color:var(--c); color:#fff; box-shadow:0 6px 18px -8px var(--c) }
+    /* Always-dark overlays so white text stays readable over bright artwork */
+    .banner-shade { background: linear-gradient(to top, rgba(8,6,10,.94) 0%, rgba(8,6,10,.72) 38%, rgba(8,6,10,.25) 75%, rgba(8,6,10,.1) 100%) }
+    .hero-badge { background: rgba(10,8,14,.72); border: 1px solid var(--color-accent); color: var(--color-accent) }
+    .hero-text { text-shadow: 0 2px 12px rgba(0,0,0,.95), 0 0 3px rgba(0,0,0,.9) }
+    #playerBar { background: rgba(10,8,14,.94) }
+    header.glass-nav { background-color: rgba(10,8,14,.82) !important; backdrop-filter: blur(20px) }
   </style>
   <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
 </head>
@@ -270,19 +276,19 @@
     <section class="relative rounded-3xl overflow-hidden border border-theme-custom bg-theme-card glass-card shadow-2xl group">
       <div class="relative h-44 sm:h-56 lg:h-64 w-full overflow-hidden">
         <img id="bannerImg" src="https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=1600&q=80" alt="Banner" class="w-full h-full object-cover object-top group-hover:scale-105 transition duration-700">
-        <div class="absolute inset-0 bg-gradient-to-t from-theme-bg via-theme-bg/40 to-transparent"></div>
+        <div class="absolute inset-0 banner-shade"></div>
       </div>
       
       <div class="absolute bottom-4 sm:bottom-6 left-4 sm:left-6 right-4 sm:right-6 flex flex-col sm:flex-row sm:items-end justify-between gap-4">
         <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-theme-accent/20 border border-theme-accent/40 text-theme-accent text-xs font-semibold mb-2 backdrop-blur-sm">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full hero-badge text-xs font-semibold mb-2 backdrop-blur-sm">
             <i class="fa-solid fa-sparkles"></i>
             <span id="bannerBadge">✨ Latest Tom Fischbach sketch color</span>
           </div>
-          <h1 id="bannerTitle" class="text-xl sm:text-3xl font-black font-display text-white tracking-tight drop-shadow-md">
+          <h1 id="bannerTitle" class="text-xl sm:text-3xl font-black font-display text-white tracking-tight hero-text">
             Галерея работ KrollvK
           </h1>
-          <p id="daysCounter" class="mt-2 text-xs sm:text-sm text-gray-200 font-semibold"></p>
+          <p id="daysCounter" class="mt-2 text-xs sm:text-sm text-white font-semibold hero-text"></p>
         </div>
       </div>
     </section>
@@ -515,7 +521,7 @@
   </div>
 
   <!-- MUSIC PLAYER -->
-  <div id="playerBar" class="fixed bottom-0 inset-x-0 z-40 hidden bg-theme-bg/90 backdrop-blur-xl border-t border-theme-custom">
+  <div id="playerBar" class="fixed bottom-0 inset-x-0 z-40 hidden backdrop-blur-xl border-t border-theme-custom">
     <div class="h-1 w-full bg-white/10 cursor-pointer" onclick="seekAudio(event)"><div id="progBar" class="h-full bg-theme-accent" style="width:0"></div></div>
     <div class="max-w-7xl mx-auto px-4 h-14 flex items-center gap-3 text-white text-xs">
       <button onclick="stepTrack(-1)"><i class="fa-solid fa-backward-step"></i></button>
